@@ -40,7 +40,6 @@ void	sort(void)
 {
 	int i;
 	int j;
-	float e;
 
 	j = 1;
 	sprite_dist();

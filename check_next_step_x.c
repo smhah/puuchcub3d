@@ -6,7 +6,7 @@ int	normx1(int i)
 {
 	if (i == 1)
 	{
-		b = (int )((p.x + cosf(p.rotationAngle) * p.moveSpeed) / TILESIZE);
+		b = (int )((p.x + cosf(p.rotationAngle) * (p.moveSpeed + TILESIZE / 2)) / TILESIZE);
 		if(lines[(int)(p.y / TILESIZE)][b] == '0' || lines[(int)(p.y / TILESIZE)][b] == 'N')
 			return(1);
 		else
@@ -14,7 +14,7 @@ int	normx1(int i)
 	}
 	else if (i == 0)
 	{
-		b = (int )(p.x - cosf(p.rotationAngle) * p.moveSpeed) / TILESIZE;
+		b = (int )(p.x - cosf(p.rotationAngle) * (p.moveSpeed + TILESIZE / 2)) / TILESIZE;
 		if(lines[(int)(p.y / TILESIZE)][b] == '0' || lines[(int)(p.y / TILESIZE)][b] == 'N')
 			return(1);
 		else
@@ -27,7 +27,7 @@ int normx2(int i)
 {
 	if (i == 2)
 	{
-		b = (int )(p.x + cosf(p.rotationAngle - Pi / 2) * p.moveSpeed) / TILESIZE;
+		b = (int )(p.x + cosf(p.rotationAngle - Pi / 2) * (TILESIZE / 4 + p.moveSpeed)) / TILESIZE;
 		if(lines[(int)(p.y / TILESIZE)][b] == '0' || lines[(int)(p.y / TILESIZE)][b] == 'N')
 			return(1);
 		else
@@ -35,7 +35,7 @@ int normx2(int i)
 	}
 	else if (i == 3)
 	{
-		b = (int )(p.x + cosf(p.rotationAngle + Pi / 2) * p.moveSpeed) / TILESIZE;
+		b = (int )(p.x + cosf(p.rotationAngle + Pi / 2) * (TILESIZE / 4 + p.moveSpeed)) / TILESIZE;
 		if(lines[(int)(p.y / TILESIZE)][b] == '0' || lines[(int)(p.y / TILESIZE)][b] == 'N')
 			return(1);
 		else
@@ -45,9 +45,6 @@ int normx2(int i)
 }
 int checknextstepx(int i)
 {
-	int b;
-
-
 	if (i == 1 || i == 0)
 	{
 		return(normx1(i));

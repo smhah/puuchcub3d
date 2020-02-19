@@ -1,3 +1,6 @@
+#ifndef CUB3D_H
+# define CUB3D_H
+
 #include "mlx.h"
 #include "utils/get_next_line.h"
 #include <fcntl.h>
@@ -5,12 +8,19 @@
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
+#include <unistd.h>
 
+//get next
+int		get_next_line(int fd, char **line);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *str, int c);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 typedef struct s_Screen{
 	int	h;
 	int w;
 }Screen;
-
+//
 char    *nopath;
 char    *sopath;
 char    *wepath;
@@ -21,6 +31,8 @@ char	*sky_color;
 #define Pi 3.14
 #define MAXINT 2147483647
 #define TILESIZE 64
+#define BUFFER_SIZE 300
+
 void    cast(float ray);
 
 int		rayFacingDown(float angle);
@@ -45,7 +57,7 @@ int columnId;
 
 //Number of rays and Rays_width
 float   Rays_width;
-unsigned int   Num_rays;
+int   Num_rays;
 // height and Weight of the map
 int height;
 int width;
@@ -100,6 +112,16 @@ typedef struct s_row{
 	castRay cast;
 }row;
 
+typedef struct s_opacity{
+	float opac;
+	float max_dist;
+}opacity;
+
+void	ft_putstr(char *s);
+int		is_player(char a);
+unsigned int convert_rgb(int r, int g, int b);
+unsigned int check_opacity(unsigned int hexcolor);
+char	**ft_read_map(int fd);
 void	chosePoints(void);
 void	sort(void);
 void	horizontalintersect(float rayAngle);
@@ -135,7 +157,7 @@ void    render(void);
 int		checknextstepx(int i);
 int		checknextstepy(int i);
 void	render3d(int i);
-void	rectangle(int e, int L, unsigned color);
+void	rectangle(int e, unsigned color);
 
 Rays r;
 Screen sc;
@@ -190,3 +212,24 @@ typedef struct s_player{
 		int map_a;
 		int map_b;
 }player;
+
+typedef struct s_fcolor{
+	int r;
+	int g;
+	int b;
+}fcolor;
+
+typedef struct s_ccolor{
+	int r;
+	int g;
+	int b;
+}ccolor;
+
+typedef struct s_orientation{
+	short north;
+	short sud;
+	short est;
+	short ouest;
+}orientation;
+
+#endif

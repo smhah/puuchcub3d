@@ -36,8 +36,6 @@ void	chosePoints()
 {
 	float a;
 	float b;
-	float c;
-	float d;
 	float delta;
 
 	a = sqrtf(powf(p.x - r.cast.verticalx, 2) + powf(p.y - r.cast.verticaly, 2));

@@ -3,13 +3,16 @@
 player	p;
 sprite	s;
 row		rows;
+opacity op;
+orientation o;
 
 void    render(void)
 {
 	unsigned int	color;
-	int				i;
 
 	r.id = 0;
+	op.max_dist = sqrtf(powf(0 - sc.w, 2) + powf(0 - sc.h, 2));
+	op.max_dist *= 0.85;
 	while(r.id < Num_rays)
 	{
 		s.sprite = 0;
@@ -47,7 +50,7 @@ void    posplayer(int height, int width, char **lines, int indice)
 			b = 0;
 			while(x < width)
 			{
-				if(lines[a][b] == 'N')
+				if(is_player(lines[a][b]))
 					gps(x, y);
 				x+=TILESIZE;
 				b++;
@@ -70,19 +73,71 @@ void	init_all(void)
 	p.radius = 3;
 	p.turnDirection = 0;
 	p.walkDirection = 0;
-	p.rotationAngle = 0;
+	if(o.north)
+		p.rotationAngle = Pi / 2;
+	if(o.sud)
+		p.rotationAngle = (-Pi) / 2;
+	if(o.est)
+		p.rotationAngle = Pi;
+	if(o.ouest)
+		p.rotationAngle = 0;
 	p.moveSpeed = 4;
-	p.rotationSpeed = 3 * Pi / 180;
+	p.rotationSpeed = 1.8 * Pi / 180;
 	p.look = 0;
 	p.map_a = 0;
 	p.map_b = 0;
 }
 
-int main()
+int		wrong_format(void)
+{
+	ft_putstr("Error\nWrong map format");
+	return(0);
+}
+
+int		wrong_argument(void)
+{
+	ft_putstr("please enter 2 arguments");
+	return(0);
+}
+
+int		check_file_name(char *s)
+{
+	int i;
+
+	i = 0;
+	while(s[i])
+	{
+		while(s[i] != '.')
+		{
+			if(s[i] == '\0')
+				return(wrong_format());
+			i++;
+		}
+		i++;
+		if(s[i])
+		{
+			if(s[i++] != 'c')
+				return(wrong_format());
+			if(s[i++] != 'u')
+				return(wrong_format());
+			if(s[i++] != 'b')
+				return(wrong_format());
+			if(s[i])
+				return(wrong_format());
+		}
+	}
+	return(1);
+}
+
+int main(int ac, char **av)
 {
 	int fd;
 
-	fd = open("map.txt", O_RDWR);
+	if(ac != 2)
+		return(wrong_argument());
+	if(!check_file_name(av[1]))
+		return(0);
+	fd = open(av[1], O_RDWR);
 	if(!readfile(fd))
 		return(0);
 	init_all();

@@ -12,10 +12,14 @@ void    player_update(void)
 		walk_for_or_back();
 	if(p.walk_left == 1 || p.walk_right == 1)
 		walk_right_or_left();
-	if (p.look_up == 1)
-		p.look+=10;
-	if (p.look_down == 1)
+	if (p.look_up == 1 && p.look < 300)
+	{
+			p.look+=10;
+	}
+	if (p.look_down == 1 && p.look > (-300))
+	{
 		p.look-=10;
+	}
 }
 
 void    castAllRays(void)

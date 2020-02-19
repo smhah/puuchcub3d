@@ -1,0 +1,1 @@
+gcc -Wall -Wextra -Werror -I /usr/local/include *.c -L /usr/local/lib -lmlx -framework OpenGl -framework Appkit -o cub3D -Ofast cub3d.a 
