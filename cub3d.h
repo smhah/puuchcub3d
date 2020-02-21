@@ -1,6 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+#include <string.h>
 #include "mlx.h"
 #include "utils/get_next_line.h"
 #include <fcntl.h>
