@@ -2,12 +2,14 @@ NO ./utils/pictures/stone.xpm
 SO ./utils/pictures/deco.xpm
 
 EA ./utils/pictures/glass.xpm
-F 110, 45,12
-C 165, 45,45
+F 110,45,12
+C 16,45,45
 R 1000  1000
 WE ./utils/pictures/brick.xpm
 
-1 1 1 1
-1 0 0 1
-1 N 0 0
-1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 0 0 0 0 0 0 0 0 1
+1 0 0 2 0 0 2 0 0 1
+1 0 0 N 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 1
+1 1 1 1 1 1 1 1 1 1

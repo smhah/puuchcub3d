@@ -86,6 +86,7 @@ void	init_all(void)
 	p.look = 0;
 	p.map_a = 0;
 	p.map_b = 0;
+	screenshot = 0;
 }
 
 int		wrong_format(void)
@@ -133,11 +134,13 @@ int main(int ac, char **av)
 {
 	int fd;
 
-	if(ac != 2)
-		return(wrong_argument());
-	if(!check_file_name(av[1]))
+	(void)av;
+	(void)ac;
+	// if(ac != 2)
+	// 	return(wrong_argument());
+	if(!check_file_name("map.cub"))
 		return(0);
-	fd = open(av[1], O_RDWR);
+	fd = open("map.cub", O_RDWR);
 	if(!readfile(fd))
 		return(0);
 	init_all();

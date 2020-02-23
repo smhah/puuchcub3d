@@ -31,6 +31,50 @@ int		is_player(char a)
 	return(0);
 }
 
+int		check_intervale(int a, int indice)
+{
+	if(a >= 0 && a <= 255)
+		return(1);
+	if(indice == 1)
+	{
+		ft_putstr("Error\nInvalide Floor color, Please enter number between 0 & 255");
+	}
+	else
+	{
+		ft_putstr("Error\nInvalide Sky color, Please enter number between 0 & 255");
+	}
+	return(0);
+}
+
+int		check_if_char(char *s, int indice)
+{
+	int i;
+
+	i = 0;
+	while(s[i])
+	{
+		if((s[i] < '0' || s[i] > '9') && s[i] != ' ')
+		{
+			if(indice == 0)
+			{
+				ft_putstr("Error\nInvalide resolution");
+			}
+			if(indice == 1)
+			{
+				printf("%c", s[i]);
+				ft_putstr("Error\ninvalide flo_or color");
+			}
+			if(indice == 2)
+			{
+				ft_putstr("Error\ninvalide sky color");
+			}
+			return(0);
+		}
+		i++;
+	}
+	return(1);
+}
+
 int   checknumber(char a)
 {
     if (a != '1' && a != '2' && a != 'N' && a != '0' && a != 'W' && a != 'S' && a != 'E')
@@ -151,7 +195,7 @@ int		ft_reso(char	*read)
 	char	**tab;
 
 	tab = ft_split(read, ' ');
-	if(!tab || tab[1] == NULL || tab[2] == NULL || tab[3] != NULL)
+	if(!tab || tab[1] == NULL || tab[2] == NULL || tab[3] != NULL || tab[0][1] != '\0')
 	{
 		ft_putstr("Error\ninvalideresolution");
 		return(0);
@@ -242,11 +286,13 @@ int		check_comma(char *color, int indice)
 	return(1);
 }
 
-void	stock_colors(char	**array, int indice)
+int 	stock_colors(char	**array, int indice)
 {
 
 	if(indice == 1)
 	{
+		if (!check_if_char(array[0], indice) || !check_if_char(array[1], indice) || !check_if_char(array[2], indice))
+			return(0);
 		fc.r = ft_atoi(array[0]);
 		fc.g = ft_atoi(array[1]);
 		fc.b = ft_atoi(array[2]);
@@ -254,11 +300,15 @@ void	stock_colors(char	**array, int indice)
 	}
 	else
 	{
+		check_if_char(array[0], indice);
+		check_if_char(array[1], indice);
+		check_if_char(array[2], indice);
 		cc.r = ft_atoi(array[0]);
 		cc.g = ft_atoi(array[1]);
 		cc.b = ft_atoi(array[2]);
 		check_all++;
 	}
+	return(1);
 }
 
 int		invalide_floor_celling_color(int indice)
@@ -293,19 +343,35 @@ int		stock_floor_celling_color(char *color, int indice)
 	if(i != 3)
 		return(invalide_floor_celling_color(indice));
 	if(indice == 1)
-		stock_colors(array, indice);
+		i = stock_colors(array, indice);
 	else
-		stock_colors(array, indice);
+		i = stock_colors(array, indice);
+	if(!i)
+		return(0);
 	return(1);
 }
 
+int		init_read_map(char **read, int fd, int i)
+{
+	int c;
+	char	**tab;
 
+	c = -1;
+	tab = ft_split(read[i], ' ');
+	lines[0] = strdup(read[i]);
+	while(tab[++c])
+		lines[0][c] = tab[c][0];
+	lines[0][c] = '\0';
+	save = c;
+	if(!(lines = ft_read_map(fd)))
+		return(0);
+	check_all++;
+	return(1);
+}
 int		readfile(int fd)
 {
 	char **read;
-	char	**tab;
 	int i;
-	int c;
 
 	check_all = 0;
     saveplayer = 0;
@@ -314,6 +380,11 @@ int		readfile(int fd)
 	lines = malloc(sizeof(char ** ) * 100);
 	while(get_next_line(fd, &read[i]))
 	{
+		// if(read[i][0] == 'R' || (read[i][0] == 'N' && read[i][1] == 'O') || (read[i][0] == 'W' && read[i][1] == 'E') || (read[i][0] == 'W' && read[i][1] == 'E') || (read[i][0] == 'E' && read[i][1] == 'A'))
+		// {
+		// 	if(!part1())
+		// 		return()
+		// }
 		if(read[i][0] == 'R')
 		{
 			if(!ft_reso(read[i]))
@@ -330,7 +401,7 @@ int		readfile(int fd)
 		else if(read[i][0] == 'F')
 		{
 			if(!stock_floor_celling_color(read[i], 1))
-				return(0);
+				return (0);
 		}
 		else if(read[i][0] == 'C')
 		{
@@ -339,16 +410,8 @@ int		readfile(int fd)
 		}
 		else if(read[i][0] == '1')
 		{
-				c = -1;
-				tab = ft_split(read[i], ' ');
-				lines[0] = strdup(read[i]);
-				while(tab[++c])
-					lines[0][c] = tab[c][0];
-				lines[0][c] = '\0';
-				save = c;
-				if(!(lines = ft_read_map(fd)))
-					return(0);
-				check_all++;
+			if(!init_read_map(read, fd, i))
+				return(0);
 		}
 		else if (read[i][0])
 		{

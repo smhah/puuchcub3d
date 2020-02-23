@@ -12,7 +12,7 @@ int		normy1(int i)
 			a = (int )((p.y + 1 + sinf(p.rotationAngle) * (p.moveSpeed + TILESIZE / 2)) / TILESIZE);
 		else 
 		a = (int )((p.y + sinf(p.rotationAngle) * (p.moveSpeed + TILESIZE / 2)) / TILESIZE);
-		if(lines[a][(int)(p.x / TILESIZE)] == '0' || lines[a][(int)(p.x / TILESIZE)] == 'N')
+		if(lines[a][(int)(p.x / TILESIZE)] == '0' || check_player(lines[a][(int)(p.x / TILESIZE)]))
 			return(1);
 		else
 			return (0);;
@@ -20,7 +20,7 @@ int		normy1(int i)
 	else if (i == 0)
 	{
 		a = (int )(p.y - sinf(p.rotationAngle) * (p.moveSpeed + TILESIZE / 2)) / TILESIZE;
-		if(lines[a][(int)(p.x / TILESIZE)] == '0' || lines[a][(int)(p.x / TILESIZE)] == 'N')
+		if(lines[a][(int)(p.x / TILESIZE)] == '0' || check_player(lines[a][(int)(p.x / TILESIZE)]))
 			return(1);
 		else
 			return (0);
@@ -35,7 +35,7 @@ int		normy2(int i)
 	if (i == 2)
 	{
 		a = (int )(p.y + sinf(p.rotationAngle - Pi / 2) * (TILESIZE / 4 + p.moveSpeed)) / TILESIZE;
-		if(lines[a][(int)(p.x / TILESIZE)] == '0' || lines[a][(int)(p.x / TILESIZE)] == 'N')
+		if(lines[a][(int)(p.x / TILESIZE)] == '0' || check_player(lines[a][(int)(p.x / TILESIZE)]))
 			return(1);
 		else
 			return (0);
@@ -43,7 +43,7 @@ int		normy2(int i)
 	else if (i == 3)
 	{
 		a = (int )(p.y + sinf(p.rotationAngle + Pi / 2) * (TILESIZE / 4 + p.moveSpeed)) / TILESIZE;
-		if(lines[a][(int)(p.x / TILESIZE)] == '0' || lines[a][(int)(p.x / TILESIZE)] == 'N')
+		if(lines[a][(int)(p.x / TILESIZE)] == '0' || check_player(lines[a][(int)(p.x / TILESIZE)]))
 			return(1);
 		else
 			return (0);

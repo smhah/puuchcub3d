@@ -67,7 +67,12 @@ int update()
 	castAllRays();
 	mlx_clear_window(mlx_ptr, win_ptr);
 	render();
+	if(screenshot == 0)
+	{
+		screen_shot();
+	}
 	if (!i || i++ == 127)
 		mlx_put_image_to_window(mlx_ptr, win_ptr, img, 0 , 0);
+	screenshot++;
 	return (0);
 }

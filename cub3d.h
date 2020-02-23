@@ -11,12 +11,19 @@
 #include <string.h>
 #include <unistd.h>
 
+int		check_player(char a);
+int f;
+unsigned char *imgg;
+int filesize;  //w is your image width, h is image height, both int
+int screenshot;
+void	screen_shot(void);
 //get next
 int		get_next_line(int fd, char **line);
 size_t	ft_strlen(const char *str);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+
 typedef struct s_Screen{
 	int	h;
 	int w;
