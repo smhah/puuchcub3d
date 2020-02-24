@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
 #include "cub3d.h"
 
 char	*ft_strdup(char *str)
@@ -35,7 +34,7 @@ char	*ft_strdup(char *str)
 
 int		ft_lastline(char **p, char **line, char *buffer)
 {
-	*line = ft_strdup(*p);
+	*line = ft_strdup_m(*p);
 	if (*p)
 	{
 		free(*p);
@@ -101,7 +100,7 @@ int		get_next_line(int fd, char **line)
 	while (ft_strchr("\n\0", buffer[j]) == 0)
 		j++;
 	p = ft_substr(buffer, j + 1, ft_strlen(buffer) - j + 1);
-	line[0] = ft_substr(buffer, 0, j);
+	line[0] = ft_substr1(buffer, 0, j);
 	free(buffer);
 	return (1);
 }

@@ -57,7 +57,7 @@ int		ft_boucle(char **p, char **buffer, char **line, int fd)
 
 	while (1)
 	{
-		if (!(*buffer = malloc(BUFFER_SIZE + 1)) || fd < 0 ||
+		if (!(*buffer = m_malloc(BUFFER_SIZE + 1)) || fd < 0 ||
 				BUFFER_SIZE < 1 || BUFFER_SIZE > 2147483647 || !line)
 			return (ft_freestatic(p));
 		j = read(fd, *buffer, BUFFER_SIZE);
@@ -100,7 +100,7 @@ int		get_next_line(int fd, char **line)
 	while (ft_strchr("\n\0", buffer[j]) == 0)
 		j++;
 	p = ft_substr(buffer, j + 1, ft_strlen(buffer) - j + 1);
-	line[0] = ft_substr(buffer, 0, j);
+	line[0] = ft_substr1(buffer, 0, j);
 	free(buffer);
 	return (1);
 }

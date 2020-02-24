@@ -49,7 +49,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	else
 		return (NULL);
 	j = ft_strlen((char *)s2);
-	if (!(s = (char *)malloc(sizeof(char) * (i + j + 1))))
+	if (!(s = (char *)m_malloc(sizeof(char) * (i + j + 1))))
 		return (0);
 	i = 0;
 	j = 0;
@@ -75,7 +75,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	i = 0;
 	if (s)
 	{
-		if (!(buf = (char *)malloc(sizeof(char) * (len + 1))))
+		if (!(buf = (char *)m_malloc(sizeof(char) * (len + 1))))
 			return (NULL);
 	}
 	else

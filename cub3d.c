@@ -61,12 +61,23 @@ void    posplayer(int height, int width, char **lines, int indice)
 	}
 }
 
+void	*m_malloc(size_t n)
+{
+	void *t;
+
+	t = malloc(n);
+	if(!t)
+		return(NULL);
+	ptr_m[g_mc++].ptr = t;
+	return(t);
+}
+
 void	init_all(void)
 {
 	fov = 60 * (Pi / 180);
 	Rays_width = 1;
 	Num_rays = sc.w / Rays_width;
-	r.rays = malloc(sizeof(float) * Num_rays);
+	r.rays = m_malloc(sizeof(float) * Num_rays);
 	r.id = 0;
 	p.x = 0;
 	p.y = 0;
@@ -130,19 +141,39 @@ int		check_file_name(char *s)
 	return(1);
 }
 
+int	free_all(void)
+{
+	int i;
+
+	i = 0;
+	while(i < g_mc)
+	{
+		free(ptr_m[i++].ptr);
+		i++;
+	}
+	free(read);
+	free(lines);
+	free(ƒ)
+	return(0);
+}
+
 int main(int ac, char **av)
 {
 	int fd;
-
 	(void)av;
 	(void)ac;
+
 	// if(ac != 2)
 	// 	return(wrong_argument());
+	g_mc = 0;
 	if(!check_file_name("map.cub"))
-		return(0);
+		return(free_all());
 	fd = open("map.cub", O_RDWR);
 	if(!readfile(fd))
-		return(0);
+	{	
+		system("leaks cub3D");	
+		return(free_all());
+	}	//free_all();
 	init_all();
 	while(lines[p.map_a])
 		p.map_a++;

@@ -5,7 +5,7 @@ Screen sc;
 void	screen_shot(void)
 {
 	filesize = 54 + 3 * sc.w * sc.h;
-	imgg = (unsigned char *)malloc(3 * sc.w * sc.h);
+	imgg = (unsigned char *)m_malloc(3 * sc.w * sc.h);
 	memset(imgg, 0, 3 * sc.w * sc.h);
 
 	unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};

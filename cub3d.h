@@ -3,14 +3,16 @@
 
 #include <string.h>
 #include "mlx.h"
-#include "utils/get_next_line.h"
+//#include "utils/get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
+void	*m_malloc(size_t n);
 int		check_player(char a);
 int f;
 unsigned char *imgg;
@@ -41,13 +43,23 @@ char	*sky_color;
 #define TILESIZE 64
 #define BUFFER_SIZE 300
 
+char	*ft_strdup_m(char *str);
 void    cast(float ray);
-
+char	*ft_strdup(char *str);
 int		rayFacingDown(float angle);
 int		rayFacingLeft(float angle);
 int rayFacingLeft(float angle);
 char		**ft_split(char const *s, char c);
 int         ft_atoi(char *s);
+char        *ft_strtrim(char const *s1, char const *set);
+char	*ft_substr1(char const *s, unsigned int start, size_t len);
+
+typedef struct s_malloc
+{
+	void	*ptr;
+}t_malloc;
+int		g_mc;
+t_malloc ptr_m[10000];
 
 void *img;
 int a,b,c;
@@ -124,7 +136,7 @@ typedef struct s_opacity{
 	float opac;
 	float max_dist;
 }opacity;
-
+char	*ft_substr_trim(char const *s, unsigned int start, size_t len);
 void	ft_putstr(char *s);
 int		is_player(char a);
 unsigned int convert_rgb(int r, int g, int b);

@@ -6,10 +6,10 @@
 /*   By: smhah <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 15:17:26 by smhah             #+#    #+#             */
-/*   Updated: 2019/10/20 22:20:04 by smhah            ###   ########.fr       */
+/*   Updated: 2020/02/24 00:10:16 by smhah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
+#include "cub3d.h"
 
 static int	ft_countwords(const char *str, char c)
 {
@@ -115,7 +115,7 @@ char		**ft_split(char const *s, char c)
 	while (i < ft_countwords(s, c))
 	{
 		len = ft_countlen(s, c, p);
-		if (!(tab[i] = (char *)malloc(sizeof(char) * (len + 1))))
+		if (!(tab[i] = (char *)m_malloc(sizeof(char) * (len + 1))))
 			return (freetab(tab, i));
 		i++;
 	}

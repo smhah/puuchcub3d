@@ -31,18 +31,15 @@ int		is_player(char a)
 	return(0);
 }
 
-int		check_intervale(int a, int indice)
+int		check_intervale(char *s, int indice)
 {
+	a = ft_atoi(s);
 	if(a >= 0 && a <= 255)
 		return(1);
 	if(indice == 1)
-	{
 		ft_putstr("Error\nInvalide Floor color, Please enter number between 0 & 255");
-	}
 	else
-	{
 		ft_putstr("Error\nInvalide Sky color, Please enter number between 0 & 255");
-	}
 	return(0);
 }
 
@@ -51,9 +48,11 @@ int		check_if_char(char *s, int indice)
 	int i;
 
 	i = 0;
+
+	s = ft_strtrim(s, " ");
 	while(s[i])
 	{
-		if((s[i] < '0' || s[i] > '9') && s[i] != ' ')
+		if((s[i] < '0' || s[i] > '9'))
 		{
 			if(indice == 0)
 			{
@@ -111,7 +110,6 @@ int   checknumber(char a)
 
 char	**last_line(char **tab, int j, int c, char **lines)
 {
-
 	if(saveplayer == 0)
 	{
 		ft_putstr("Error\nI don't see any player please enter one");
@@ -200,6 +198,8 @@ int		ft_reso(char	*read)
 		ft_putstr("Error\ninvalideresolution");
 		return(0);
 	}
+	if(!check_if_char(tab[1], 0) || !check_if_char(tab[2], 0))
+		return(0);
 	sc.h = ft_atoi(tab[1]);
 	sc.w = ft_atoi(tab[2]);
 	check_all++;
@@ -213,7 +213,7 @@ void	stocknopath(char *path)
 
 	i = 0;
 	j = 3;
-		nopath = malloc(ft_strlen((char *)path) - 2);
+		nopath = m_malloc(ft_strlen((char *)path) - 2);
 		while(path[j])
 			nopath[i++] = path[j++];
 		nopath[i] = '\0';
@@ -227,7 +227,7 @@ void	stocksopath(char *path)
 
 	i = 0;
 	j = 3;
-		sopath = malloc(ft_strlen((char *)path) - 2);
+		sopath = m_malloc(ft_strlen((char *)path) - 2);
 		while(path[j])
 			sopath[i++] = path[j++];
 		sopath[i] = '\0';
@@ -241,7 +241,7 @@ void	stockwepath(char *path)
 
 	i = 0;
 	j = 3;
-	wepath = malloc(ft_strlen((char *)path) - 2);
+	wepath = m_malloc(ft_strlen((char *)path) - 2);
 	while(path[j])
 		wepath[i++] = path[j++];
 	wepath[i] = '\0';
@@ -255,7 +255,7 @@ void	stockeapath(char *path)
 
 	i = 0;
 	j = 3;
-	eapath = malloc(ft_strlen((char *)path) - 2);
+	eapath = m_malloc(ft_strlen((char *)path) - 2);
 	while(path[j])
 		eapath[i++] = path[j++];
 	eapath[i] = '\0';
@@ -280,7 +280,9 @@ int		check_comma(char *color, int indice)
 		if (indice == 1)
 			ft_putstr("Error\ninvalide floor color, use 2 comma");
 		else
+		{
 			ft_putstr("Error\ninvalide sky color, use 2 comma");
+		}
 		return(0);
 	}
 	return(1);
@@ -293,6 +295,8 @@ int 	stock_colors(char	**array, int indice)
 	{
 		if (!check_if_char(array[0], indice) || !check_if_char(array[1], indice) || !check_if_char(array[2], indice))
 			return(0);
+		if (!check_intervale(array[0], indice) || !check_intervale(array[1], indice) || !check_intervale(array[2], indice))
+			return(0);
 		fc.r = ft_atoi(array[0]);
 		fc.g = ft_atoi(array[1]);
 		fc.b = ft_atoi(array[2]);
@@ -300,9 +304,10 @@ int 	stock_colors(char	**array, int indice)
 	}
 	else
 	{
-		check_if_char(array[0], indice);
-		check_if_char(array[1], indice);
-		check_if_char(array[2], indice);
+		if (!check_if_char(array[0], indice) || !check_if_char(array[1], indice) || !check_if_char(array[2], indice))
+			return(0);
+		if (!check_intervale(array[0], indice) || !check_intervale(array[1], indice) || !check_intervale(array[2], indice))
+			return(0);
 		cc.r = ft_atoi(array[0]);
 		cc.g = ft_atoi(array[1]);
 		cc.b = ft_atoi(array[2]);
@@ -330,7 +335,7 @@ int		stock_floor_celling_color(char *color, int indice)
 		return(0);
 	i = 0;
 	j = 1;
-	floor_color = malloc(ft_strlen(color));
+	floor_color = m_malloc(ft_strlen(color));
 	while(color[j] < '0' || color[j] > '9')
 		j++;
 	while(color[j])
@@ -358,7 +363,7 @@ int		init_read_map(char **read, int fd, int i)
 
 	c = -1;
 	tab = ft_split(read[i], ' ');
-	lines[0] = strdup(read[i]);
+	lines[0] = ft_strdup_m(read[i]);
 	while(tab[++c])
 		lines[0][c] = tab[c][0];
 	lines[0][c] = '\0';
