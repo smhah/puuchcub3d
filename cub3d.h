@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+char **g_read;
 void	*m_malloc(size_t n);
 int		check_player(char a);
 int f;
@@ -25,7 +26,12 @@ size_t	ft_strlen(const char *str);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-
+int save;
+int save_player;
+int g_line;
+void	fill_others(char **tab, char **lines, int c, int j);
+int		fill_others_last(char **tab, char **lines, int c, int j);
+int		fill_others_center(char **tab, char **lines, int c, int j);
 typedef struct s_Screen{
 	int	h;
 	int w;

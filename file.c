@@ -116,22 +116,17 @@ char	**last_line(char **tab, int j, int c, char **lines)
 		return(NULL);
 	}
 	c = -1;
+	g_line = 0;
 	tab = ft_split(lines[j], ' ');
 	while(tab[++c])
     {
-		lines[j][c] = tab[c][0];
-        if(lines[j][c] != '1')
-        {
-            ft_putstr("Error\n, Map must be closed");
-            return(NULL);
-        }
-        if(!checknumber(lines[j][c]))
-            return(NULL);
+		if(!fill_others_last(tab, lines, c, j))
+			return(NULL);
     }
-	lines[j][c] = '\0';
+	lines[j][g_line] = '\0';
 	lines[++j] = NULL;
 	j--;
-	if (c != save)
+	if (g_line != save)
 		return(fixline());
 	if(lines[j][0] > '9' || lines[j][0] <'0')
 		return(invalidemap());
@@ -146,17 +141,15 @@ char	**unclosed_map(void)
 
 int		boucle1(int j, int c, char **tabx)
 {
+	g_line = 0;
 	while(tabx[++c])
 	{
-		lines[j][c] = tabx[c][0];
-		if(lines[0][c] != '1' || lines[j][0] != '1' || ( c == save - 1 && lines[j][c] != '1'))
-		{
-			if(!unclosed_map())
-				return(0);
-		}
-		if(!checknumber(lines[j][c]))
+		printf("hello\n");
+		//lines[j][c] = tabx[c][0];
+		if(!fill_others_center(tabx, lines, c, j))
 			return(0);
 	}
+	lines[j][g_line] = '\0';
 	return(c);
 }
 
@@ -176,9 +169,8 @@ char    **ft_read_map(int fd)
 		tabx = ft_split(lines[j], ' ');
 		if(!(c = boucle1(j, c, tabx)))
 			return(NULL);
-		if (c != save)
+		if (g_line != save)
 			return(fixline());
-		lines[j][c] = '\0';
 		if(lines[j][0] > '9' || lines[j][0] <'0')
 			return(invalidemap());
 		j++;
@@ -188,11 +180,11 @@ char    **ft_read_map(int fd)
 	return(lines);
 }
 
-int		ft_reso(char	*read)
+int		ft_reso(char	*g_read)
 {
 	char	**tab;
 
-	tab = ft_split(read, ' ');
+	tab = ft_split(g_read, ' ');
 	if(!tab || tab[1] == NULL || tab[2] == NULL || tab[3] != NULL || tab[0][1] != '\0')
 	{
 		ft_putstr("Error\ninvalideresolution");
@@ -356,69 +348,117 @@ int		stock_floor_celling_color(char *color, int indice)
 	return(1);
 }
 
-int		init_read_map(char **read, int fd, int i)
+void		fill_others(char **tab, char **lines, int c, int j)
+{
+	int i;
+
+	i = 0;
+	while(tab[c][i])
+	{
+		lines[j][g_line++] = tab[c][i++];
+		printf("++>%c\n", lines[j][g_line - 1]);
+	}
+}
+int			fill_others_center(char **tab, char **lines, int c, int j)
+{
+	int i;
+
+	i = 0;
+	while(tab[c][i])
+	{
+		lines[j][g_line] = tab[c][i++];
+		if(lines[0][g_line] != '1' || lines[j][0] != '1' || ( c == save - 1 && lines[j][g_line] != '1'))
+		{
+			if(!unclosed_map())
+				return(0);
+		}
+		if(!checknumber(lines[j][g_line]))
+			return(0);
+		g_line++;
+	}
+	return(1);
+}
+
+int		fill_others_last(char **tab, char **lines, int c, int j)
+{
+	int i;
+
+	i = 0;
+	while(tab[c][i])
+	{
+		lines[j][g_line] = tab[c][i++];
+		if(lines[j][g_line] != '1')
+        {
+            ft_putstr("Error\n, Map must be closed");
+            return(0);
+        }
+        if(!checknumber(lines[j][g_line]))
+            return(0);
+			g_line++;
+	}
+	return(1);
+}
+
+int		init_read_map(char **g_read, int fd, int i)
 {
 	int c;
 	char	**tab;
 
+	g_line = 0;
 	c = -1;
-	tab = ft_split(read[i], ' ');
-	lines[0] = ft_strdup_m(read[i]);
+	tab = ft_split(g_read[i], ' ');
+	lines[0] = ft_strdup_m(g_read[i]);
 	while(tab[++c])
-		lines[0][c] = tab[c][0];
-	lines[0][c] = '\0';
-	save = c;
+		fill_others(tab, lines, c, 0);
+	lines[0][g_line] = '\0';
+	save = g_line;
+	g_line = 0;
 	if(!(lines = ft_read_map(fd)))
 		return(0);
 	check_all++;
 	return(1);
 }
+
 int		readfile(int fd)
 {
-	char **read;
 	int i;
 
 	check_all = 0;
     saveplayer = 0;
 	i = 0;
-	read = malloc(sizeof(char **) * 100);
+	g_read = malloc(sizeof(char **) * 100);
 	lines = malloc(sizeof(char ** ) * 100);
-	while(get_next_line(fd, &read[i]))
+	while(get_next_line(fd, &g_read[i]))
 	{
-		// if(read[i][0] == 'R' || (read[i][0] == 'N' && read[i][1] == 'O') || (read[i][0] == 'W' && read[i][1] == 'E') || (read[i][0] == 'W' && read[i][1] == 'E') || (read[i][0] == 'E' && read[i][1] == 'A'))
-		// {
-		// 	if(!part1())
-		// 		return()
-		// }
-		if(read[i][0] == 'R')
+		if(g_read[i][0] == 'R')
 		{
-			if(!ft_reso(read[i]))
+			if(!ft_reso(g_read[i]))
 				return(0);
 		}
-		else if(read[i][0] == 'N' && read[i][1] == 'O')
-			stocknopath(read[i]);
-		else if(read[i][0] == 'S' && read[i][1] == 'O')
-			stocksopath(read[i]);
-		else if(read[i][0] == 'W' && read[i][1] == 'E')
-			stockwepath(read[i]);
-		else if(read[i][0] == 'E' && read[i][1] == 'A')
-			stockeapath(read[i]);
-		else if(read[i][0] == 'F')
+		else if(g_read[i][0] == 'N' && g_read[i][1] == 'O')
+			stocknopath(g_read[i]);
+		else if(g_read[i][0] == 'S' && g_read[i][1] == 'O')
+			stocksopath(g_read[i]);
+		else if(g_read[i][0] == 'W' && g_read[i][1] == 'E')
+			stockwepath(g_read[i]);
+		else if(g_read[i][0] == 'E' && g_read[i][1] == 'A')
+			stockeapath(g_read[i]);
+		else if(g_read[i][0] == 'F')
 		{
-			if(!stock_floor_celling_color(read[i], 1))
+			if(!stock_floor_celling_color(g_read[i], 1))
 				return (0);
 		}
-		else if(read[i][0] == 'C')
+		else if(g_read[i][0] == 'C')
 		{
-			if(!stock_floor_celling_color(read[i], 2))
+			if(!stock_floor_celling_color(g_read[i], 2))
 				return(0);
 		}
-		else if(read[i][0] == '1')
+		else if(g_read[i][0] == '1')
 		{
-			if(!init_read_map(read, fd, i))
+			if(!init_read_map(g_read, fd, i))
 				return(0);
 		}
-		else if (read[i][0])
+		else if (g_read[i][0])
 		{
 			ft_putstr("Error\ninvalidefile");
 			return(0);
@@ -427,7 +467,6 @@ int		readfile(int fd)
 	}
 	if(check_all != 8)
 	{
-		printf("%d\n", check_all);
 		ft_putstr("invalide file\n");
 		return(0);
 	}
