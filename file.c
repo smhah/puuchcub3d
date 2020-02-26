@@ -55,18 +55,11 @@ int		check_if_char(char *s, int indice)
 		if((s[i] < '0' || s[i] > '9'))
 		{
 			if(indice == 0)
-			{
 				ft_putstr("Error\nInvalide resolution");
-			}
 			if(indice == 1)
-			{
-				printf("%c", s[i]);
 				ft_putstr("Error\ninvalide flo_or color");
-			}
 			if(indice == 2)
-			{
 				ft_putstr("Error\ninvalide sky color");
-			}
 			return(0);
 		}
 		i++;
@@ -74,30 +67,40 @@ int		check_if_char(char *s, int indice)
 	return(1);
 }
 
+void	init_orientation(char a)
+{
+	o.sud = 0;
+	o.est = 0;
+	o.north = 0;
+	o.ouest = 0;
+	if(a == 'W')
+		o.ouest = 1;
+	if (a == 'S')
+		o.sud = 1;
+	if (a == 'E')
+		o.est = 1;
+	if (a == 'N')
+		o.north = 1;
+}
+
+int		check_char(char a)
+{
+	if (a != '1' && a != '2' && a != 'N' &&
+		a != '0' && a != 'W' && a != 'S' && a != 'E')
+			return(1);
+	return(0);
+}
+
 int   checknumber(char a)
 {
-    if (a != '1' && a != '2' && a != 'N' && a != '0' && a != 'W' && a != 'S' && a != 'E')
+    if (check_char(a))
     {
         ft_putstr("Error\n, please use numbers{0;1;2}");
         return(0);
     }
     if(is_player(a))
 	{
-		o.sud = 0;
-		o.est = 0;
-		o.north = 0;
-		o.ouest = 0;
-		if(a == 'W')
-		{
-			ft_putstr("check\n");
-			o.ouest = 1;
-		}
-		if (a == 'S')
-			o.sud = 1;
-		if (a == 'E')
-			o.est = 1;
-		if (a == 'N')
-			o.north = 1;
+		init_orientation(a);
         saveplayer++;
 	}
     if(saveplayer > 1)
@@ -125,14 +128,14 @@ char	**last_line(char **tab, int j, int c, char **lines)
     }
 	lines[j][g_line] = '\0';
 	lines[++j] = NULL;
-	j--;
 	if (g_line != save)
 		return(fixline());
-	if(lines[j][0] > '9' || lines[j][0] <'0')
+	if(lines[j - 1][0] > '9' || lines[j - 1][0] <'0')
 		return(invalidemap());
 	j = 0;
 	return(tab);
 }
+
 char	**unclosed_map(void)
 {
 		ft_putstr("Error\n, Map must be closed");
@@ -144,8 +147,6 @@ int		boucle1(int j, int c, char **tabx)
 	g_line = 0;
 	while(tabx[++c])
 	{
-		printf("hello\n");
-		//lines[j][c] = tabx[c][0];
 		if(!fill_others_center(tabx, lines, c, j))
 			return(0);
 	}
@@ -153,30 +154,67 @@ int		boucle1(int j, int c, char **tabx)
 	return(c);
 }
 
-char    **ft_read_map(int fd)
+int		check_last_line(char	*s)
 {
 	int i;
-	int c;
-	int d;
-	char **tabx;
 
 	i = 0;
+	while(s[i])
+	{
+		if(s[i] != '1')
+		{
+			ft_putstr("Error\nunclosed map");
+			return(0);
+		}
+		i++;
+	}
+	if(i != save)
+		return(0);
+	return(1);
+}
+
+int		part1_map(void)
+{
+	map.c = -1;
+	map.tabx = ft_split(lines[j], ' ');
+	if(!(map.c = boucle1(j, map.c, map.tabx)))
+		return(0);
+	if (g_line != save)
+	{
+		fixline();
+		return(0);
+	}
+	if(lines[j][0] > '9' || lines[j][0] <'0')
+	{
+		invalidemap();
+		return(0);
+	}
+	j++;
+	return(1);
+}
+
+char    **ft_read_map(int fd)
+{
 	j = 1;
-	d = 0;
 	while(get_next_line(fd, &lines[j]))
 	{
-		c = -1;
-		tabx = ft_split(lines[j], ' ');
-		if(!(c = boucle1(j, c, tabx)))
-			return(NULL);
-		if (g_line != save)
-			return(fixline());
-		if(lines[j][0] > '9' || lines[j][0] <'0')
-			return(invalidemap());
-		j++;
+		if(lines[j][0] != '\0')
+		{
+			if(!part1_map())
+				return(NULL);
+		}
 	}
-	if(!last_line(tabx, j, c, lines))
-		return(0);
+	if(lines[j][0] != '\0')
+	{
+		if(!last_line(map.tabx, j, map.c, lines))
+			return(0);
+	}
+	else
+	{
+		lines[j] = NULL;
+		if(!check_last_line(lines[j - 1]))
+			return(0);
+	}
 	return(lines);
 }
 
@@ -192,8 +230,8 @@ int		ft_reso(char	*g_read)
 	}
 	if(!check_if_char(tab[1], 0) || !check_if_char(tab[2], 0))
 		return(0);
-	sc.h = ft_atoi(tab[1]);
-	sc.w = ft_atoi(tab[2]);
+	sc.h = (ft_atoi(tab[1]) > 1440 ? 1440 : ft_atoi(tab[1]));
+	sc.w = (ft_atoi(tab[2]) > 2550 ? 2550 : ft_atoi(tab[1]));
 	check_all++;
 	return(1);
 }
@@ -280,31 +318,41 @@ int		check_comma(char *color, int indice)
 	return(1);
 }
 
+int		stock_floor_color(char	**array, int indice)
+{
+	if (!check_if_char(array[0], indice) || !check_if_char
+			(array[1], indice) || !check_if_char(array[2], indice))
+				return(0);
+	if (!check_intervale(array[0], indice) || !check_intervale
+			(array[1], indice) || !check_intervale(array[2], indice))
+				return(0);
+	fc.r = ft_atoi(array[0]);
+	fc.g = ft_atoi(array[1]);
+	fc.b = ft_atoi(array[2]);
+	check_all++;
+	return(1);
+}
+
+int		stock_celling_color(char **array, int indice)
+{
+	if (!check_if_char(array[0], indice) || !check_if_char(array[1],
+	 	indice) || !check_if_char(array[2], indice))
+			return(0);
+	if (!check_intervale(array[0], indice) || !check_intervale(array[1],
+	 	indice) || !check_intervale(array[2], indice))
+			return(0);
+	cc.r = ft_atoi(array[0]);
+	cc.g = ft_atoi(array[1]);
+	cc.b = ft_atoi(array[2]);
+	check_all++;
+	return(1);
+}
 int 	stock_colors(char	**array, int indice)
 {
-
 	if(indice == 1)
-	{
-		if (!check_if_char(array[0], indice) || !check_if_char(array[1], indice) || !check_if_char(array[2], indice))
-			return(0);
-		if (!check_intervale(array[0], indice) || !check_intervale(array[1], indice) || !check_intervale(array[2], indice))
-			return(0);
-		fc.r = ft_atoi(array[0]);
-		fc.g = ft_atoi(array[1]);
-		fc.b = ft_atoi(array[2]);
-		check_all++;
-	}
+		stock_floor_color(array, indice);
 	else
-	{
-		if (!check_if_char(array[0], indice) || !check_if_char(array[1], indice) || !check_if_char(array[2], indice))
-			return(0);
-		if (!check_intervale(array[0], indice) || !check_intervale(array[1], indice) || !check_intervale(array[2], indice))
-			return(0);
-		cc.r = ft_atoi(array[0]);
-		cc.g = ft_atoi(array[1]);
-		cc.b = ft_atoi(array[2]);
-		check_all++;
-	}
+		stock_celling_color(array, indice);
 	return(1);
 }
 
@@ -317,6 +365,18 @@ int		invalide_floor_celling_color(int indice)
 	return(0);
 }
 
+int		norme_stock_color(int indice, char **array, int i)
+{
+	if(i != 3)
+		return(invalide_floor_celling_color(indice));
+	if(indice == 1)
+		i = stock_colors(array, indice);
+	else
+		i = stock_colors(array, indice);
+	if(!i)
+		return(0);
+	return(1);
+}
 int		stock_floor_celling_color(char *color, int indice)
 {
 	int i;
@@ -337,13 +397,7 @@ int		stock_floor_celling_color(char *color, int indice)
 	i = 0;
 	while(array[i])
 		i++;
-	if(i != 3)
-		return(invalide_floor_celling_color(indice));
-	if(indice == 1)
-		i = stock_colors(array, indice);
-	else
-		i = stock_colors(array, indice);
-	if(!i)
+	if(!norme_stock_color(indice, array , i))
 		return(0);
 	return(1);
 }
@@ -356,7 +410,6 @@ void		fill_others(char **tab, char **lines, int c, int j)
 	while(tab[c][i])
 	{
 		lines[j][g_line++] = tab[c][i++];
-		printf("++>%c\n", lines[j][g_line - 1]);
 	}
 }
 int			fill_others_center(char **tab, char **lines, int c, int j)
@@ -367,11 +420,12 @@ int			fill_others_center(char **tab, char **lines, int c, int j)
 	while(tab[c][i])
 	{
 		lines[j][g_line] = tab[c][i++];
-		if(lines[0][g_line] != '1' || lines[j][0] != '1' || ( c == save - 1 && lines[j][g_line] != '1'))
-		{
-			if(!unclosed_map())
-				return(0);
-		}
+		if(lines[0][g_line] != '1' || lines[j][0] != '1'
+			|| ( g_line == save - 1 && lines[j][g_line] != '1'))
+				{
+					if(!unclosed_map())
+					return(0);
+				}
 		if(!checknumber(lines[j][g_line]))
 			return(0);
 		g_line++;
@@ -419,15 +473,33 @@ int		init_read_map(char **g_read, int fd, int i)
 	return(1);
 }
 
-int		readfile(int fd)
+int		split2(int i, int fd)
 {
-	int i;
+	if(g_read[i][0] == 'F')
+	{
+		if(!stock_floor_celling_color(g_read[i], 1))
+			return (0);
+	}
+	else if(g_read[i][0] == 'C')
+	{
+		if(!stock_floor_celling_color(g_read[i], 2))
+			return(0);
+	}
+	else if(g_read[i][0] == '1')
+	{
+		if(!init_read_map(g_read, fd, i))
+			return(0);
+	}
+	else if (g_read[i][0])
+	{
+		ft_putstr("Error\ninvalidefile");
+		return(0);
+	}
+	return(1);
+}
 
-	check_all = 0;
-    saveplayer = 0;
-	i = 0;
-	g_read = malloc(sizeof(char **) * 100);
-	lines = malloc(sizeof(char ** ) * 100);
+int		readfile2(int i, int fd)
+{
 	while(get_next_line(fd, &g_read[i]))
 	{
 		if(g_read[i][0] == 'R')
@@ -443,28 +515,25 @@ int		readfile(int fd)
 			stockwepath(g_read[i]);
 		else if(g_read[i][0] == 'E' && g_read[i][1] == 'A')
 			stockeapath(g_read[i]);
-		else if(g_read[i][0] == 'F')
-		{
-			if(!stock_floor_celling_color(g_read[i], 1))
-				return (0);
-		}
-		else if(g_read[i][0] == 'C')
-		{
-			if(!stock_floor_celling_color(g_read[i], 2))
+		else
+			if(!split2(i, fd))
 				return(0);
-		}
-		else if(g_read[i][0] == '1')
-		{
-			if(!init_read_map(g_read, fd, i))
-				return(0);
-		}
-		else if (g_read[i][0])
-		{
-			ft_putstr("Error\ninvalidefile");
-			return(0);
-		}
 		i++;
 	}
+	return(1);
+}
+
+int		readfile(int fd)
+{
+	int i;
+
+	check_all = 0;
+    saveplayer = 0;
+	i = 0;
+	g_read = m_malloc(sizeof(char **) * 100);
+	lines = m_malloc(sizeof(char ** ) * 100);
+	if(!readfile2(i, fd))
+		return(0);
 	if(check_all != 8)
 	{
 		ft_putstr("invalide file\n");

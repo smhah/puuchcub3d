@@ -12,6 +12,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+int	ft_strcmp(char *s1, char *s2);
+int		check_color(unsigned int hexcolor);
+int	free_all(void);
+int		exit_cub3d(int indice);
 char **g_read;
 void	*m_malloc(size_t n);
 int		check_player(char a);
@@ -244,6 +248,15 @@ typedef struct s_fcolor{
 	int g;
 	int b;
 }fcolor;
+
+typedef struct s_read_map{
+	char **tabx;
+	int i;
+	int c;
+	int d;
+}read_map;
+
+read_map map;
 
 typedef struct s_ccolor{
 	int r;

@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smhah <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/30 18:53:56 by smhah             #+#    #+#             */
-/*   Updated: 2019/11/01 22:43:10 by smhah            ###   ########.fr       */
+/*   Created: 2019/07/14 19:05:12 by smhah             #+#    #+#             */
+/*   Updated: 2019/07/14 19:05:47 by smhah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "cub3d.h"
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i;
 
-# include <unistd.h>
-# include <stdlib.h>
-
-int		get_next_line(int fd, char **line);
-size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *str, int c);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-#endif
+	i = 0;
+	while (*s1 || *s2)
+	{
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
+	}
+	return (0);
+}

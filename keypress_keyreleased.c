@@ -4,6 +4,15 @@ player p;
 
 int keypress(int key)
 {
+	if(key == 53)
+	{
+		//exit_cub3d();
+		free_all();
+		//system("leaks cub3D");
+		exit(1);
+	}
+	
+	//if()
 	if (key == 0)
 		p.walk_left = 1;
 	if (key == 2)

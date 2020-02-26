@@ -4,8 +4,11 @@ Screen sc;
 
 void	screen_shot(void)
 {
+	int i;
+	int j;
+
 	filesize = 54 + 3 * sc.w * sc.h;
-	imgg = (unsigned char *)m_malloc(3 * sc.w * sc.h);
+	imgg = (unsigned char *)malloc(3 * sc.w * sc.h);
 	memset(imgg, 0, 3 * sc.w * sc.h);
 
 	unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
@@ -26,18 +29,22 @@ void	screen_shot(void)
 	bmpinfoheader[10] = (unsigned char)(       sc.h>>16);
 	bmpinfoheader[11] = (unsigned char)(       sc.h>>24);
 
-	f = open("img.bmp", O_CREAT| O_RDWR);
+	f = open("img.bmp", O_WRONLY| O_CREAT, S_IRUSR | S_IWUSR);
 	//fwrite(bmpfileheader,1,14,f);
 	write(f, bmpfileheader, 14);
 	//fwrite(bmpinfoheader,1,40,f);
 	write(f, bmpinfoheader, 40);
-	for(int i=0; i< sc.h; i++)
+	i = 0;
+	while(i < sc.h)
 	{
-		for(int j=0; j<sc.w; j++)
+		j = 0;
+		while(j < sc.w)
 		{
 			write(f, data + (sc.w * (sc.h - i) + j), 3);
+			j++;
 		}
 		write(f, bmppad, (4 - (sc.w * 3) % 4) % 4);
+		i++;;
 	}
 	free(imgg);
 	close(f);

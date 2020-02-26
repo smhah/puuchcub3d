@@ -10,7 +10,7 @@ int		ft_xpm(unsigned int **info, char	*file)
 
 	if ((fd = open(file, O_RDONLY)) < 0)
 	{
-		printf("Error\ninvalide path");
+		ft_putstr("Error\ninvalide path");
 		return(0);
 	}
 	close(fd);

@@ -21,6 +21,20 @@ unsigned int check_opacity(unsigned int hexcolor)
 	return(convert_rgb(red, green, blue));
 }
 
+int		check_color(unsigned int hexcolor)
+{
+	double red;
+	double green;
+	double blue;
+ 
+	red = ((hexcolor >> 16) & 255);
+    green = ((hexcolor >> 8) & 255);
+    blue = (hexcolor & 255);
+	if(hexcolor == 0x000000)
+		return(0);
+	return(red == green && green == blue);
+}
+
 void	check_sides(int i)
 {
 	if(r.cast.distance < 0)

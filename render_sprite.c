@@ -24,6 +24,7 @@ void	rendersprite(void)
 	find_point();
 }
 
+
 void	rectosprite(float spriteHeight, int i)
 {
 	int j;
@@ -36,7 +37,7 @@ void	rectosprite(float spriteHeight, int i)
 	while(j - c < spriteHeight && j < sc.h)
 	{
 		y = (int)((j - c) * TILESIZE) / spriteHeight;
-			if(t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y] != 0xff000000 && t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y] != 0x000000)
+			if(t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y] != 0x000000 && check_color(t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y]))
 				data[(int )i + (int )j * sc.w] = t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y];
 				//printf("color is%x\n", data[(int )i + (int )j * sc.w] = t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y]);
 		j++;

@@ -11,7 +11,7 @@ void    render(void)
 	unsigned int	color;
 
 	r.id = 0;
-	op.max_dist = sqrtf(powf(0 - sc.w, 2) + powf(0 - sc.h, 2));
+	op.max_dist =  sqrtf(powf(0 - (float)p.map_a * TILESIZE, 2) + powf(0 - (float)p.map_b * TILESIZE, 2));
 	op.max_dist *= 0.85;
 	while(r.id < Num_rays)
 	{
@@ -97,12 +97,16 @@ void	init_all(void)
 	p.look = 0;
 	p.map_a = 0;
 	p.map_b = 0;
-	screenshot = 0;
 }
 
-int		wrong_format(void)
+int		wrong_format(int indice)
 {
-	ft_putstr("Error\nWrong map format");
+	if(indice == 0)
+		ft_putstr("Error\nWrong map format");
+	else
+		ft_putstr("Error\nWrong save format");
+	if(indice == 1)
+			screenshot = 1;
 	return(0);
 }
 
@@ -112,30 +116,37 @@ int		wrong_argument(void)
 	return(0);
 }
 
-int		check_file_name(char *s)
+int		check_file_name(char *s, int indice)
 {
 	int i;
 
 	i = 0;
-	while(s[i])
+	// if(indice == 0 && ft_strcmp("map.cub", s))
+	// 	return(wrong_format(indice));
+	if(indice == 1 && ft_strcmp("--save", s))
+		return(wrong_format(indice));
+	if(indice == 0)
 	{
-		while(s[i] != '.')
+		while(s[i])
 		{
-			if(s[i] == '\0')
-				return(wrong_format());
+			while(s[i] != '.')
+			{
+				if(s[i] == '\0')
+					return(wrong_format(indice));
+				i++;
+			}
 			i++;
-		}
-		i++;
-		if(s[i])
-		{
-			if(s[i++] != 'c')
-				return(wrong_format());
-			if(s[i++] != 'u')
-				return(wrong_format());
-			if(s[i++] != 'b')
-				return(wrong_format());
 			if(s[i])
-				return(wrong_format());
+			{
+				if(s[i++] != 'c')
+					return(wrong_format(indice));
+				if(s[i++] != 'u')
+					return(wrong_format(indice));
+				if(s[i++] != 'b')
+					return(wrong_format(indice));
+				if(s[i])
+					return(wrong_format(indice));
+			}
 		}
 	}
 	return(1);
@@ -143,37 +154,68 @@ int		check_file_name(char *s)
 
 int	free_all(void)
 {
-	int i;
+	int o;
 
-	i = 0;
-	while(i < g_mc)
+	o = 0;
+	while(o < g_mc)
 	{
-		free(ptr_m[i++].ptr);
-		i++;
+		free(ptr_m[o].ptr);
+		o++;
 	}
-	free(read);
-	free(lines);
-	free(ƒ)
 	return(0);
+}
+
+int		exit_cub3d(int indice)
+{
+	free_all();
+	//system("leaks cub3D");
+	if(indice == 1)
+		mlx_destroy_window(mlx_ptr, win_ptr);
+	exit(-1);
+	return(0);
+}
+
+int		invalide_map_path(void)
+{
+	ft_putstr("Error\ninvalide map path\n");
+	return(0);
+}
+
+int		beginning(int ac, char **av, int fd)
+{
+	g_mc = 0;
+	if(ac < 2)
+		return(wrong_argument());
+	else if(ac > 2)
+	{
+		if(!check_file_name(av[2], 1))
+			return(exit_cub3d(0));
+		screenshot = 1;
+	}
+	else
+		screenshot = -1;
+	if(!check_file_name(av[1], 0))
+		return(exit_cub3d(0));
+	if((fd = open(av[1], O_RDWR)) < 0)
+		return(invalide_map_path());
+	if(!readfile(fd))
+	{	
+		exit_cub3d(0);
+		return(0);
+	}
+	mlx_ptr = mlx_init();
+	if((!ft_textures()))
+		return(exit_cub3d(0));
+	return(1);
 }
 
 int main(int ac, char **av)
 {
 	int fd;
-	(void)av;
-	(void)ac;
 
-	// if(ac != 2)
-	// 	return(wrong_argument());
-	g_mc = 0;
-	if(!check_file_name("map.cub"))
-		return(free_all());
-	fd = open("map.cub", O_RDWR);
-	if(!readfile(fd))
-	{	
-		system("leaks cub3D");	
-		return(free_all());
-	}	//free_all();
+	fd = 0;
+	if(!beginning(ac, av, fd))
+		return(0);
 	init_all();
 	while(lines[p.map_a])
 		p.map_a++;
@@ -181,11 +223,22 @@ int main(int ac, char **av)
 	while(lines[0][p.map_b])
 		p.map_b++;
 	width = TILESIZE * p.map_b;
-	mlx_ptr = mlx_init();
-	if((!ft_textures()))
-		return (0);
-	win_ptr = mlx_new_window(mlx_ptr, sc.w, sc.h, "mlx 42");
-	img = mlx_new_image(mlx_ptr, sc.w, sc.h);
+	if(screenshot == -1)
+		win_ptr = mlx_new_window(mlx_ptr, sc.w, sc.h, "mlx 42");
+	else
+	{
+		printf("%d\n", g_mc);
+		img = mlx_new_image(mlx_ptr, sc.w, sc.h);
+		data = (int*)mlx_get_data_addr(img, &a, &b, &c);
+		posplayer(height, width, lines, 0);
+		castAllRays();
+		render();
+		screen_shot();
+		system("leaks cub3D");
+		free_all();
+		return(0);
+	}
+img = mlx_new_image(mlx_ptr, sc.w, sc.h);
 	data = (int*)mlx_get_data_addr(img, &a, &b, &c);
 	posplayer(height, width, lines, 0);
 	mlx_loop_hook(mlx_ptr, update, 0);

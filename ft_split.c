@@ -108,7 +108,7 @@ char		**ft_split(char const *s, char c)
 		casee = ft_countwords(s, c);
 	else
 		return (0);
-	if (!(tab = (char **)malloc(sizeof(char*) * (casee + 1))))
+	if (!(tab = (char **)m_malloc(sizeof(char*) * (casee + 1))))
 		return (0);
 	casee = 0;
 	p = &casee;

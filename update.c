@@ -13,13 +13,9 @@ void    player_update(void)
 	if(p.walk_left == 1 || p.walk_right == 1)
 		walk_right_or_left();
 	if (p.look_up == 1 && p.look < 300)
-	{
 			p.look+=10;
-	}
 	if (p.look_down == 1 && p.look > (-300))
-	{
 		p.look-=10;
-	}
 }
 
 void    castAllRays(void)
@@ -57,22 +53,24 @@ void	blackscreen(void)
 	}
 }
 
+int	keyexit(int key)
+{
+	(void)key;
+	return(exit_cub3d(0));
+}
+
 int update()
 {
 	static char i;
 	//clock_t b, e;
 	mlx_hook(win_ptr , 2 , 0 ,  keypress, 0);
 	mlx_hook(win_ptr, 3 , 0 ,  keyreleased,  0);
+	mlx_hook(win_ptr, 17,0L, keyexit, 0);
 	player_update();
 	castAllRays();
-	mlx_clear_window(mlx_ptr, win_ptr);
 	render();
-	if(screenshot == 0)
-	{
-		screen_shot();
-	}
+	mlx_clear_window(mlx_ptr, win_ptr);
 	if (!i || i++ == 127)
 		mlx_put_image_to_window(mlx_ptr, win_ptr, img, 0 , 0);
-	screenshot++;
 	return (0);
 }
