@@ -1,8 +1,6 @@
 #include "cub3d.h"
 
 extern char** lines;
-int j;
-int check_all;
 
 Screen sc;
 int save;
@@ -11,61 +9,6 @@ int saveplayer;
 fcolor fc;
 ccolor cc;
 orientation o;
-
-char	**fixline(void)
-{
-	ft_putstr("Error\ninvalide map,");
-	return(NULL);
-}
-
-char	**invalidemap(void)
-{
-	ft_putstr("Error\ninvalidemap");
-	return(NULL);
-}
-
-int		is_player(char a)
-{
-	if(a == 'W' || a == 'N' || a == 'S' || a == 'E')
-		return (1);
-	return(0);
-}
-
-int		check_intervale(char *s, int indice)
-{
-	a = ft_atoi(s);
-	if(a >= 0 && a <= 255)
-		return(1);
-	if(indice == 1)
-		ft_putstr("Error\nInvalide Floor color, Please enter number between 0 & 255");
-	else
-		ft_putstr("Error\nInvalide Sky color, Please enter number between 0 & 255");
-	return(0);
-}
-
-int		check_if_char(char *s, int indice)
-{
-	int i;
-
-	i = 0;
-
-	s = ft_strtrim(s, " ");
-	while(s[i])
-	{
-		if((s[i] < '0' || s[i] > '9'))
-		{
-			if(indice == 0)
-				ft_putstr("Error\nInvalide resolution");
-			if(indice == 1)
-				ft_putstr("Error\ninvalide flo_or color");
-			if(indice == 2)
-				ft_putstr("Error\ninvalide sky color");
-			return(0);
-		}
-		i++;
-	}
-	return(1);
-}
 
 void	init_orientation(char a)
 {
@@ -142,88 +85,13 @@ char	**unclosed_map(void)
 		return(NULL);
 }
 
-int		boucle1(int j, int c, char **tabx)
-{
-	g_line = 0;
-	while(tabx[++c])
-	{
-		if(!fill_others_center(tabx, lines, c, j))
-			return(0);
-	}
-	lines[j][g_line] = '\0';
-	return(c);
-}
-
-int		check_last_line(char	*s)
-{
-	int i;
-
-	i = 0;
-	while(s[i])
-	{
-		if(s[i] != '1')
-		{
-			ft_putstr("Error\nunclosed map");
-			return(0);
-		}
-		i++;
-	}
-	if(i != save)
-		return(0);
-	return(1);
-}
-
-int		part1_map(void)
-{
-	map.c = -1;
-	map.tabx = ft_split(lines[j], ' ');
-	if(!(map.c = boucle1(j, map.c, map.tabx)))
-		return(0);
-	if (g_line != save)
-	{
-		fixline();
-		return(0);
-	}
-	if(lines[j][0] > '9' || lines[j][0] <'0')
-	{
-		invalidemap();
-		return(0);
-	}
-	j++;
-	return(1);
-}
-
-char    **ft_read_map(int fd)
-{
-	j = 1;
-	while(get_next_line(fd, &lines[j]))
-	{
-		if(lines[j][0] != '\0')
-		{
-			if(!part1_map())
-				return(NULL);
-		}
-	}
-	if(lines[j][0] != '\0')
-	{
-		if(!last_line(map.tabx, j, map.c, lines))
-			return(0);
-	}
-	else
-	{
-		lines[j] = NULL;
-		if(!check_last_line(lines[j - 1]))
-			return(0);
-	}
-	return(lines);
-}
-
-int		ft_reso(char	*g_read)
+int		ft_reso(char *g_read)
 {
 	char	**tab;
 
 	tab = ft_split(g_read, ' ');
-	if(!tab || tab[1] == NULL || tab[2] == NULL || tab[3] != NULL || tab[0][1] != '\0')
+	if(!tab || tab[1] == NULL || tab[2] == NULL ||
+		tab[3] != NULL || tab[0][1] != '\0')
 	{
 		ft_putstr("Error\ninvalideresolution");
 		return(0);
@@ -234,62 +102,6 @@ int		ft_reso(char	*g_read)
 	sc.w = (ft_atoi(tab[2]) > 2550 ? 2550 : ft_atoi(tab[1]));
 	check_all++;
 	return(1);
-}
-
-void	stocknopath(char *path)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 3;
-		nopath = m_malloc(ft_strlen((char *)path) - 2);
-		while(path[j])
-			nopath[i++] = path[j++];
-		nopath[i] = '\0';
-	check_all++;
-}
-
-void	stocksopath(char *path)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 3;
-		sopath = m_malloc(ft_strlen((char *)path) - 2);
-		while(path[j])
-			sopath[i++] = path[j++];
-		sopath[i] = '\0';
-	check_all++;
-}
-
-void	stockwepath(char *path)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 3;
-	wepath = m_malloc(ft_strlen((char *)path) - 2);
-	while(path[j])
-		wepath[i++] = path[j++];
-	wepath[i] = '\0';
-	check_all++;
-}
-
-void	stockeapath(char *path)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 3;
-	eapath = m_malloc(ft_strlen((char *)path) - 2);
-	while(path[j])
-		eapath[i++] = path[j++];
-	eapath[i] = '\0';
-	check_all++;
 }
 
 int		check_comma(char *color, int indice)
@@ -318,65 +130,6 @@ int		check_comma(char *color, int indice)
 	return(1);
 }
 
-int		stock_floor_color(char	**array, int indice)
-{
-	if (!check_if_char(array[0], indice) || !check_if_char
-			(array[1], indice) || !check_if_char(array[2], indice))
-				return(0);
-	if (!check_intervale(array[0], indice) || !check_intervale
-			(array[1], indice) || !check_intervale(array[2], indice))
-				return(0);
-	fc.r = ft_atoi(array[0]);
-	fc.g = ft_atoi(array[1]);
-	fc.b = ft_atoi(array[2]);
-	check_all++;
-	return(1);
-}
-
-int		stock_celling_color(char **array, int indice)
-{
-	if (!check_if_char(array[0], indice) || !check_if_char(array[1],
-	 	indice) || !check_if_char(array[2], indice))
-			return(0);
-	if (!check_intervale(array[0], indice) || !check_intervale(array[1],
-	 	indice) || !check_intervale(array[2], indice))
-			return(0);
-	cc.r = ft_atoi(array[0]);
-	cc.g = ft_atoi(array[1]);
-	cc.b = ft_atoi(array[2]);
-	check_all++;
-	return(1);
-}
-int 	stock_colors(char	**array, int indice)
-{
-	if(indice == 1)
-		stock_floor_color(array, indice);
-	else
-		stock_celling_color(array, indice);
-	return(1);
-}
-
-int		invalide_floor_celling_color(int indice)
-{
-	if (indice == 1)
-		ft_putstr("Error\nInvalide floor color");
-	else
-		ft_putstr("Error\nInvalide celling color");
-	return(0);
-}
-
-int		norme_stock_color(int indice, char **array, int i)
-{
-	if(i != 3)
-		return(invalide_floor_celling_color(indice));
-	if(indice == 1)
-		i = stock_colors(array, indice);
-	else
-		i = stock_colors(array, indice);
-	if(!i)
-		return(0);
-	return(1);
-}
 int		stock_floor_celling_color(char *color, int indice)
 {
 	int i;
@@ -450,26 +203,6 @@ int		fill_others_last(char **tab, char **lines, int c, int j)
             return(0);
 			g_line++;
 	}
-	return(1);
-}
-
-int		init_read_map(char **g_read, int fd, int i)
-{
-	int c;
-	char	**tab;
-
-	g_line = 0;
-	c = -1;
-	tab = ft_split(g_read[i], ' ');
-	lines[0] = ft_strdup_m(g_read[i]);
-	while(tab[++c])
-		fill_others(tab, lines, c, 0);
-	lines[0][g_line] = '\0';
-	save = g_line;
-	g_line = 0;
-	if(!(lines = ft_read_map(fd)))
-		return(0);
-	check_all++;
 	return(1);
 }
 

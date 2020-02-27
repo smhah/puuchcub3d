@@ -11,7 +11,8 @@ void    render(void)
 	unsigned int	color;
 
 	r.id = 0;
-	op.max_dist =  sqrtf(powf(0 - (float)p.map_a * TILESIZE, 2) + powf(0 - (float)p.map_b * TILESIZE, 2));
+	op.max_dist =  sqrtf(powf(0 - (float)p.map_a * 
+		TILESIZE, 2) + powf(0 - (float)p.map_b * TILESIZE, 2));
 	op.max_dist *= 0.85;
 	while(r.id < Num_rays)
 	{
@@ -22,7 +23,8 @@ void    render(void)
 		g_i = s.sprite;
 		while(g_i--)
 		{
-			if(rows.xhit[g_i] < MAXINT - 100 && rows.dist[g_i] < fabsf(r.cast.distance))
+			if(rows.xhit[g_i] < MAXINT - 100 &&
+				rows.dist[g_i] < fabsf(r.cast.distance))
 			{
 				rendersprite();
 				 if(s.xofset[r.id][g_i] > 0 && s.xofset[r.id][g_i] < 70)
@@ -61,17 +63,6 @@ void    posplayer(int height, int width, char **lines, int indice)
 	}
 }
 
-void	*m_malloc(size_t n)
-{
-	void *t;
-
-	t = malloc(n);
-	if(!t)
-		return(NULL);
-	ptr_m[g_mc++].ptr = t;
-	return(t);
-}
-
 void	init_all(void)
 {
 	fov = 60 * (Pi / 180);
@@ -97,88 +88,6 @@ void	init_all(void)
 	p.look = 0;
 	p.map_a = 0;
 	p.map_b = 0;
-}
-
-int		wrong_format(int indice)
-{
-	if(indice == 0)
-		ft_putstr("Error\nWrong map format");
-	else
-		ft_putstr("Error\nWrong save format");
-	if(indice == 1)
-			screenshot = 1;
-	return(0);
-}
-
-int		wrong_argument(void)
-{
-	ft_putstr("please enter 2 arguments");
-	return(0);
-}
-
-int		check_file_name(char *s, int indice)
-{
-	int i;
-
-	i = 0;
-	// if(indice == 0 && ft_strcmp("map.cub", s))
-	// 	return(wrong_format(indice));
-	if(indice == 1 && ft_strcmp("--save", s))
-		return(wrong_format(indice));
-	if(indice == 0)
-	{
-		while(s[i])
-		{
-			while(s[i] != '.')
-			{
-				if(s[i] == '\0')
-					return(wrong_format(indice));
-				i++;
-			}
-			i++;
-			if(s[i])
-			{
-				if(s[i++] != 'c')
-					return(wrong_format(indice));
-				if(s[i++] != 'u')
-					return(wrong_format(indice));
-				if(s[i++] != 'b')
-					return(wrong_format(indice));
-				if(s[i])
-					return(wrong_format(indice));
-			}
-		}
-	}
-	return(1);
-}
-
-int	free_all(void)
-{
-	int o;
-
-	o = 0;
-	while(o < g_mc)
-	{
-		free(ptr_m[o].ptr);
-		o++;
-	}
-	return(0);
-}
-
-int		exit_cub3d(int indice)
-{
-	free_all();
-	//system("leaks cub3D");
-	if(indice == 1)
-		mlx_destroy_window(mlx_ptr, win_ptr);
-	exit(-1);
-	return(0);
-}
-
-int		invalide_map_path(void)
-{
-	ft_putstr("Error\ninvalide map path\n");
-	return(0);
 }
 
 int		beginning(int ac, char **av, int fd)
@@ -226,19 +135,8 @@ int main(int ac, char **av)
 	if(screenshot == -1)
 		win_ptr = mlx_new_window(mlx_ptr, sc.w, sc.h, "mlx 42");
 	else
-	{
-		printf("%d\n", g_mc);
-		img = mlx_new_image(mlx_ptr, sc.w, sc.h);
-		data = (int*)mlx_get_data_addr(img, &a, &b, &c);
-		posplayer(height, width, lines, 0);
-		castAllRays();
-		render();
-		screen_shot();
-		system("leaks cub3D");
-		free_all();
-		return(0);
-	}
-img = mlx_new_image(mlx_ptr, sc.w, sc.h);
+		return(screen());
+	img = mlx_new_image(mlx_ptr, sc.w, sc.h);
 	data = (int*)mlx_get_data_addr(img, &a, &b, &c);
 	posplayer(height, width, lines, 0);
 	mlx_loop_hook(mlx_ptr, update, 0);

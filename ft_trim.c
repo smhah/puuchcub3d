@@ -15,6 +15,7 @@ static int  find_last(int i, char const *s1, char const *set)
     }
     return (res);
 }
+
 static int  find_first(int i, char const *s1, char const *set)
 {
     char    *c;
@@ -33,6 +34,7 @@ static int  find_first(int i, char const *s1, char const *set)
     }
     return (res);
 }
+
 char        *ft_strtrim(char const *s1, char const *set)
 {
     char    *res;

@@ -12,6 +12,42 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+//errors
+int		invalide_map_path(void);
+int		wrong_argument(void);
+int		wrong_format(int indice);
+int		check_file_name(char *s, int indice);
+int		check_extension(char *s, int indice);
+
+void    posplayer(int height, int width, char **lines, int indice);
+int		init_read_map(char **g_read, int fd, int i);
+char    **ft_read_map(int fd);
+int		part1_map(void);
+int		check_last_line(char *s);
+int		boucle1(int j, int c, char **tabx);
+char	**fixline(void);
+char	**invalidemap(void);
+int		is_player(char a);
+int		check_intervale(char *s, int indice);
+int		check_if_char(char *s, int indice);
+int j;
+char	**last_line(char **tab, int j, int c, char **lines);
+int check_all;
+void	stocknopath(char *path);
+void	stocksopath(char *path);
+void	stockwepath(char *path);
+void	stockeapath(char *path);
+int		stock_floor_color(char	**array, int indice);
+int		stock_celling_color(char **array, int indice);
+int 	stock_colors(char	**array, int indice);
+int		invalide_floor_celling_color(int indice);
+int		norme_stock_color(int indice, char **array, int i);
+
+
+unsigned char bmppad[3];
+unsigned char bmpfileheader[14];
+unsigned char bmpinfoheader[40];
+int		screen(void);
 int	ft_strcmp(char *s1, char *s2);
 int		check_color(unsigned int hexcolor);
 int	free_all(void);
