@@ -1,24 +1,20 @@
 #include "cub3d.h"
 
-Rays r;
-player p;
-row rows;
-
 void	stock_hhit(float ax, float ay, float angle)
 {
-	rows.xhit[rows.id] = ax;
-	rows.yhit[rows.id++] = ay + (!rayFacingDown(angle) ? 1 : 0);
-	rows.xhit[rows.id] = MAXINT;
-	rows.yhit[rows.id] = MAXINT;
+	g_rows.xhit[g_rows.id] = ax;
+	g_rows.yhit[g_rows.id++] = ay + (!ray_facing_down(angle) ? 1 : 0);
+	g_rows.xhit[g_rows.id] = MAXINT;
+	g_rows.yhit[g_rows.id] = MAXINT;
 }
 
 void	stock_hcast(float ax, float ay, float angle)
 {
-	r.cast.horizontalx = ax;
-	r.cast.horizontaly = ay + (!rayFacingDown(angle) ? 1 : 0);
+	g_r.cast.horizontalx = ax;
+	g_r.cast.horizontaly = ay + (!ray_facing_down(angle) ? 1 : 0);
 }
 
-void	horizontalintersect(float rayAngle)
+void	horizontalintersect(float rayangle)
 {
 	float ystep;
 	float xstep;
@@ -26,19 +22,19 @@ void	horizontalintersect(float rayAngle)
 	float ax;
 	float angle;
 
-	angle = normalize(rayAngle);
-	ystep = TILESIZE * (rayFacingDown(angle) ? 1 : -1);
+	angle = normalize(rayangle);
+	ystep = TILESIZE * (ray_facing_down(angle) ? 1 : -1);
 	xstep = tan(angle) ? ystep / tan(angle) : 0;
-	ay = (floor(p.y / TILESIZE) * TILESIZE) + (rayFacingDown(angle) ? TILESIZE : 0);
-	ax = p.x + ((ay - p.y) / tan(angle));
-	r.cast.distance = 0;
-	if(!rayFacingDown(angle))
+	ay = (floor(g_p.y / TILESIZE) * TILESIZE) + (ray_facing_down(angle) ? TILESIZE : 0);
+	ax = g_p.x + ((ay - g_p.y) / tan(angle));
+	g_r.cast.distance = 0;
+	if(!ray_facing_down(angle))
 		ay--;
-	while(ay >= 0 && ax >= 0 && ax < width && ay < height)
+	while(ay >= 0 && ax >= 0 && ax < g_width && ay < g_height)
 	{
-		if(lines[(int )(ay) / TILESIZE][(int )(ax) / TILESIZE] == '2')
+		if(g_lines[(int )(ay) / TILESIZE][(int )(ax) / TILESIZE] == '2')
 			stock_hhit(ax, ay, angle);
-		if(lines[(int )(ay) / TILESIZE][(int )(ax) / TILESIZE] == '1')
+		if(g_lines[(int )(ay) / TILESIZE][(int )(ax) / TILESIZE] == '1')
 		{
 			stock_hcast(ax, ay, angle);
 			break;

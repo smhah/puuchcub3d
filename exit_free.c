@@ -5,7 +5,7 @@ int		exit_cub3d(int indice)
 	free_all();
 	//system("leaks cub3D");
 	if(indice == 1)
-		mlx_destroy_window(mlx_ptr, win_ptr);
+		mlx_destroy_window(g_mlx_ptr, g_win_ptr);
 	exit(-1);
 	return(0);
 }

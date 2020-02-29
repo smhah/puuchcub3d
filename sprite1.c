@@ -1,68 +1,65 @@
 
 #include "cub3d.h"
 
-sprite s;
-player p;
-
 void    bigcas1(void)
 {
-    if(tab[2] == 0)
+    if(g_tab[2] == 0)
 		{
-			if(s.xprime[r.id][g_i] >= s.xc[r.id])
-				s.xofset[r.id][g_i] += TILESIZE / 2;
+			if(g_s.xprime[g_r.id][g_i] >= g_s.xc[g_r.id])
+				g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
 			else
-				s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+				g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
 		}
 		else
 		{
-			if(tab[0] == 1)
+			if(g_tab[0] == 1)
 			{
-				if(s.yprime[r.id][g_i] <= s.yc[r.id])
-					s.xofset[r.id][g_i] += TILESIZE / 2;
+				if(g_s.yprime[g_r.id][g_i] <= g_s.yc[g_r.id])
+					g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
 				else
-					s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+					g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
 			}
 			else
 			{
-				if(s.yprime[r.id][g_i] >= s.yc[r.id])
-					s.xofset[r.id][g_i] += TILESIZE / 2;
+				if(g_s.yprime[g_r.id][g_i] >= g_s.yc[g_r.id])
+					g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
 				else
-					s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+					g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
 			}
 		}
 }
 
 void    bigcas2(void)
 {
-    if(tab[2] == 0)
+    if(g_tab[2] == 0)
     {
-        if(s.xprime[r.id][g_i] >= s.xc[r.id])
-            s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+        if(g_s.xprime[g_r.id][g_i] >= g_s.xc[g_r.id])
+            g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
         else
-            s.xofset[r.id][g_i] += TILESIZE / 2;
+            g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
     }
     else
     {
-        if(tab[0] == 1)
+        if(g_tab[0] == 1)
         {
-            if(s.yprime[r.id][g_i] >= s.yc[r.id])
-                s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+            if(g_s.yprime[g_r.id][g_i] >= g_s.yc[g_r.id])
+                g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
             else
-                s.xofset[r.id][g_i] += TILESIZE / 2;
+                g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
         }
         else
         {
-            if(s.yprime[r.id][g_i] <= s.yc[r.id])
-                s.xofset[r.id][g_i] = TILESIZE - TILESIZE / 2 - s.xofset[r.id][g_i];
+            if(g_s.yprime[g_r.id][g_i] <= g_s.yc[g_r.id])
+                g_s.xofset[g_r.id][g_i] = TILESIZE - TILESIZE / 2 - g_s.xofset[g_r.id][g_i];
             else
-                s.xofset[r.id][g_i] += TILESIZE / 2;
+                g_s.xofset[g_r.id][g_i] += TILESIZE / 2;
         }
     }
 }
 
 void    correctofsset(void)
 {
-    if(tab[1] == 0)
+    if(g_tab[1] == 0)
 	{
 		bigcas1();
 	}
@@ -74,14 +71,14 @@ void    correctofsset(void)
 
 void	direction_info(void)
 {
-	if(rayFacingLeft(normalize(r.rays[r.id])))
-		tab[0] = 1;
+	if(ray_facing_left(normalize(g_r.rays[g_r.id])))
+		g_tab[0] = 1;
 	else
-		tab[0] = 0;
-	if(rayFacingDown(normalize(r.rays[r.id])))
-		tab[1] = 1;
+		g_tab[0] = 0;
+	if(ray_facing_down(normalize(g_r.rays[g_r.id])))
+		g_tab[1] = 1;
 	else
-		tab[1] = 0;
+		g_tab[1] = 0;
 }
 
 void	find_point(void)
@@ -90,13 +87,13 @@ void	find_point(void)
 	float b;
 	float angle;
 
-	angle = normalize(r.rays[r.id]);
-	angle = (Pi - angle) * (-1);
-	b = atan2(p.y - s.yc[r.id], p.x - s.xc[r.id]);
+	angle = normalize(g_r.rays[g_r.id]);
+	angle = (PI - angle) * (-1);
+	b = atan2(g_p.y - g_s.yc[g_r.id], g_p.x - g_s.xc[g_r.id]);
 	b = normalize(b);
 	a = angle - b;
-	s.xprime[r.id][g_i] = p.x + (s.xc[r.id] - p.x) * cosf(a) - (s.yc[r.id] - p.y) * sinf(a);
-	s.yprime[r.id][g_i] = p.y + (s.xc[r.id] - p.x) * sinf(a) + (s.yc[r.id] - p.y) * cosf(a);
-	s.xofset[r.id][g_i] = sqrtf(powf(s.xprime[r.id][g_i] - s.xc[r.id], 2) + powf(s.yprime[r.id][g_i] - s.yc[r.id], 2));
+	g_s.xprime[g_r.id][g_i] = g_p.x + (g_s.xc[g_r.id] - g_p.x) * cosf(a) - (g_s.yc[g_r.id] - g_p.y) * sinf(a);
+	g_s.yprime[g_r.id][g_i] = g_p.y + (g_s.xc[g_r.id] - g_p.x) * sinf(a) + (g_s.yc[g_r.id] - g_p.y) * cosf(a);
+	g_s.xofset[g_r.id][g_i] = sqrtf(powf(g_s.xprime[g_r.id][g_i] - g_s.xc[g_r.id], 2) + powf(g_s.yprime[g_r.id][g_i] - g_s.yc[g_r.id], 2));
     correctofsset();
 }

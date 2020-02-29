@@ -1,39 +1,35 @@
 #include "cub3d.h"
 
-row rows;
-Rays r;
-player p;
-
 void	sprite_dist(void)
 {
 	int i;
 	int e;
 
 	i = 0;
-	while(rows.xhit[i] < MAXINT - 100)
+	while(g_rows.xhit[i] < MAXINT - 100)
 	{
-		e = rows.xhit[i];
+		e = g_rows.xhit[i];
 		if( e < 0)
 			e = e * (-1);
-		rows.dist[i] = sqrtf(powf(p.x - e, 2) + powf(p.y - rows.yhit[i], 2));
+		g_rows.dist[i] = sqrtf(powf(g_p.x - e, 2) + powf(g_p.y - g_rows.yhit[i], 2));
 		i++;
 	}
-	rows.dist[i] = MAXINT;
+	g_rows.dist[i] = MAXINT;
 }
 
 void	switchs(int i, int j)
 {
 	float tmp;
 
-	tmp = rows.dist[i];
-	rows.dist[i] = rows.dist[j];
-	rows.dist[j] = tmp;
-	tmp = rows.xhit[i];
-	rows.xhit[i] = rows.xhit[j];
-	rows.xhit[j] = tmp;
-	tmp = rows.yhit[i];
-	rows.yhit[i] = rows.yhit[j];
-	rows.yhit[j] = tmp;
+	tmp = g_rows.dist[i];
+	g_rows.dist[i] = g_rows.dist[j];
+	g_rows.dist[j] = tmp;
+	tmp = g_rows.xhit[i];
+	g_rows.xhit[i] = g_rows.xhit[j];
+	g_rows.xhit[j] = tmp;
+	tmp = g_rows.yhit[i];
+	g_rows.yhit[i] = g_rows.yhit[j];
+	g_rows.yhit[j] = tmp;
 }
 
 void	sort(void)
@@ -44,12 +40,12 @@ void	sort(void)
 	j = 1;
 	sprite_dist();
 	i = 0;
-	while(rows.dist[i] < MAXINT - 100)
+	while(g_rows.dist[i] < MAXINT - 100)
 	{
 		j = i + 1;
-		while(rows.dist[j] < MAXINT - 100)
+		while(g_rows.dist[j] < MAXINT - 100)
 		{
-			if(rows.dist[i] > rows.dist[j])
+			if(g_rows.dist[i] > g_rows.dist[j])
 				switchs(i, j);
 			j++;
 		}

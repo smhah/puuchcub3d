@@ -1,23 +1,15 @@
 #include "cub3d.h"
 
-Screen sc;
-text t;
-Rays r;
-player p;
-fcolor fc;
-ccolor cc;
-opacity op;
-
 unsigned int check_opacity(unsigned int hexcolor)
 {
 	double red;
 	double green;
 	double blue;
  
-	op.opac = 1 - r.cast.distance / op.max_dist;
-	red = ((hexcolor >> 16) & 255) * op.opac;
-    green = ((hexcolor >> 8) & 255) * op.opac;
-    blue = (hexcolor & 255) * op.opac;
+	g_op.opac = 1 - g_r.cast.distance / g_op.max_dist;
+	red = ((hexcolor >> 16) & 255) * g_op.opac;
+    green = ((hexcolor >> 8) & 255) * g_op.opac;
+    blue = (hexcolor & 255) * g_op.opac;
 	return(convert_rgb(red, green, blue));
 }
 
@@ -37,21 +29,21 @@ int		check_color(unsigned int hexcolor)
 
 void	check_sides(int i)
 {
-	if(r.cast.distance < 0)
+	if(g_r.cast.distance < 0)
 	{
-		tab[0] = 0;
-		r.cast.distance *= (-1);
+		g_tab[0] = 0;
+		g_r.cast.distance *= (-1);
 	}
 	else
-		tab[0] = 1;
-	if(rayFacingLeft(normalize(r.rays[i])))
-		tab[1] = 1;
+		g_tab[0] = 1;
+	if(ray_facing_left(normalize(g_r.rays[i])))
+		g_tab[1] = 1;
 	else
-		tab[1] = 0;
-	if(rayFacingDown(normalize(r.rays[i])))
-		tab[2] = 1;
+		g_tab[1] = 0;
+	if(ray_facing_down(normalize(g_r.rays[i])))
+		g_tab[2] = 1;
 	else
-		tab[2] = 0;	
+		g_tab[2] = 0;	
 }
 
 void	render3d(int i)
@@ -61,33 +53,33 @@ void	render3d(int i)
 
 	color = 0;
 	check_sides(i);
-	if(tab[0] == 0)
-		t.txt_x = (int)r.cast.wallHitx % TILESIZE;
+	if(g_tab[0] == 0)
+		g_t.txt_x = (int)g_r.cast.wall_hit_x % TILESIZE;
 	else
-		t.txt_x = (int)r.cast.wallHity % TILESIZE;
-	projectDistance = (sc.w / 2) / tan(fov / 2);
-	r.cast.distance = cosf(p.rotationAngle - r.rays[i]) * r.cast.distance;
-	r.rayHight = (projectDistance / r.cast.distance) * TILESIZE;
+		g_t.txt_x = (int)g_r.cast.wall_hit_y % TILESIZE;
+	projectDistance = (g_sc.w / 2) / tan(fov / 2);
+	g_r.cast.distance = cosf(g_p.rotation_angle - g_r.rays[i]) * g_r.cast.distance;
+	g_r.ray_hight = (projectDistance / g_r.cast.distance) * TILESIZE;
 	rectangle(i, color);
 }
 
 void	put_texture(int i, int j)
 {
-	if(tab[0] == 0 && tab[2] == 1)
-		data[(int )i + (int )j * sc.w] = check_opacity(t.txtr1[t.txt_x + TILESIZE * t.txt_y]);
-	else if(tab[0] == 0 && tab[2] == 0)
-		data[(int )i + (int )j * sc.w] = check_opacity(t.txtr2[t.txt_x + TILESIZE * t.txt_y]);
-	else if (tab[0] == 1 && tab[1] == 1)
-		data[(int )i + (int )j * sc.w] = check_opacity(t.txtr4[t.txt_x + TILESIZE * t.txt_y]);
-	else if (tab[0] == 1 && tab[1] == 0)
-		data[(int )i + (int )j * sc.w] = check_opacity(t.txtr3[t.txt_x + TILESIZE * t.txt_y]);
+	if(g_tab[0] == 0 && g_tab[2] == 1)
+		data[(int )i + (int )j * g_sc.w] = check_opacity(g_t.txtr1[g_t.txt_x + TILESIZE * g_t.txt_y]);
+	else if(g_tab[0] == 0 && g_tab[2] == 0)
+		data[(int )i + (int )j * g_sc.w] = check_opacity(g_t.txtr2[g_t.txt_x + TILESIZE * g_t.txt_y]);
+	else if (g_tab[0] == 1 && g_tab[1] == 1)
+		data[(int )i + (int )j * g_sc.w] = check_opacity(g_t.txtr4[g_t.txt_x + TILESIZE * g_t.txt_y]);
+	else if (g_tab[0] == 1 && g_tab[1] == 0)
+		data[(int )i + (int )j * g_sc.w] = check_opacity(g_t.txtr3[g_t.txt_x + TILESIZE * g_t.txt_y]);
 }
 
 int		print_texture(int j, int c, int i)
 {
-	while(j - c <= r.rayHight && j < sc.h)
+	while(j - c <= g_r.ray_hight && j < g_sc.h)
 	{
-		t.txt_y = (int)((j - c) * TILESIZE) / r.rayHight;
+		g_t.txt_y = (int)((j - c) * TILESIZE) / g_r.ray_hight;
 		put_texture(i, j);
 		j++;
 	}
@@ -116,19 +108,19 @@ void	rectangle(int e, unsigned int color)
 	i = e;
 	c = 0;
 	e = 0;
-	j = sc.h / 2 - r.rayHight / 2 + p.look;
+	j = g_sc.h / 2 - g_r.ray_hight / 2 + g_p.look;
 		c = j;
 		while(e < j)
 		{
-			data[(int)i + (int)e *sc.w] = convert_rgb(cc.r, cc.g, cc.b);
+			data[(int)i + (int)e *g_sc.w] = convert_rgb(g_cc.r, g_cc.g, g_cc.b);
 			e++;
 		}
 		if(j < 0)
 			j = 0;
 		j = print_texture(j, c, i);
-		while(j < sc.h)
+		while(j < g_sc.h)
 		{
-			data[(int)i + (int)j *sc.w] = convert_rgb(fc.r, fc.g, fc.b);
+			data[(int)i + (int)j *g_sc.w] = convert_rgb(g_fc.r, g_fc.g, g_fc.b);
 			j++;
 		}
 }

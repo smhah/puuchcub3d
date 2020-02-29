@@ -1,57 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cast_rays.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smhah <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/29 04:38:27 by smhah             #+#    #+#             */
+/*   Updated: 2020/02/29 04:38:28 by smhah            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-Rays r;
-row rows;
-sprite s;
-player p;
-
-void	cast(float rayAngle)
+void	cast(float rayangle)
 {
-	rows.id = 0;
-	r.cast.wallHitx = MAXINT;
-	r.cast.wallHity = MAXINT;
-	r.cast.horizontalx = MAXINT;
-	r.cast.horizontaly = MAXINT;
-	r.cast.verticalx = MAXINT;
-	r.cast.verticaly = MAXINT;
-	s.xh[s.sprite] = MAXINT;
-	s.yh[s.sprite] = MAXINT;
-	s.xv[r.id][s.sprite] = MAXINT;
-	s.xh[s.sprite] = MAXINT;
-	s.x[r.id][s.sprite] = MAXINT;
-	s.y[r.id][s.sprite] = MAXINT;
-	s.dist[r.id][s.sprite] = 0;
-	horizontalintersect(rayAngle);
-	verticalintersect(rayAngle);
-	s.sprite = rows.id;
-	if(rows.id)
+	g_rows.id = 0;
+	g_r.cast.wall_hit_x = MAXINT;
+	g_r.cast.wall_hit_y = MAXINT;
+	g_r.cast.horizontalx = MAXINT;
+	g_r.cast.horizontaly = MAXINT;
+	g_r.cast.verticalx = MAXINT;
+	g_r.cast.verticaly = MAXINT;
+	horizontalintersect(rayangle);
+	verticalintersect(rayangle);
+	g_s.sprite = g_rows.id;
+	if (g_rows.id)
 	{
-		rows.id = 0;
+		g_rows.id = 0;
 		sort();
 	}
-	chosePoints();
+	chose_points();
 }
 
-void	chosePoints()
+void	chose_points(void)
 {
 	float a;
 	float b;
 	float delta;
 
-	a = sqrtf(powf(p.x - r.cast.verticalx, 2) + powf(p.y - r.cast.verticaly, 2));
-	b = sqrtf(powf(p.x - r.cast.horizontalx, 2) + powf(p.y - r.cast.horizontaly, 2));
+	a = sqrtf(powf(g_p.x - g_r.cast.verticalx, 2)
+		+ powf(g_p.y - g_r.cast.verticaly, 2));
+	b = sqrtf(powf(g_p.x - g_r.cast.horizontalx, 2)
+		+ powf(g_p.y - g_r.cast.horizontaly, 2));
 	if (a <= b)
 	{
-		r.cast.wallHitx = r.cast.verticalx;
-		r.cast.wallHity = r.cast.verticaly;
-		r.cast.distance = a;
+		g_r.cast.wall_hit_x = g_r.cast.verticalx;
+		g_r.cast.wall_hit_y = g_r.cast.verticaly;
+		g_r.cast.distance = a;
 		delta = a;
 	}
 	else
 	{
-		r.cast.wallHitx = r.cast.horizontalx;
-		r.cast.wallHity = r.cast.horizontaly;
-		r.cast.distance = b * (-1);
+		g_r.cast.wall_hit_x = g_r.cast.horizontalx;
+		g_r.cast.wall_hit_y = g_r.cast.horizontaly;
+		g_r.cast.distance = b * (-1);
 		delta = b;
 	}
 }

@@ -1,25 +1,20 @@
 #include "cub3d.h"
 
-row rows;
-player p;
-sprite s;
-text t;
-
 void	rendersprite(void)
 {
 	direction_info();
-	if(rows.xhit[g_i] < 0)
+	if(g_rows.xhit[g_i] < 0)
 	{
-		rows.xhit[g_i] *= -1;
-		s.xc[r.id] = floor((rows.xhit[g_i]) / TILESIZE) * TILESIZE + ((tab[0] == 1) ? TILESIZE / (-2) : (TILESIZE / 2));
-		s.yc[r.id] = floor(rows.yhit[g_i] / TILESIZE) * TILESIZE + TILESIZE / 2;
-		tab[2] = 1;
+		g_rows.xhit[g_i] *= -1;
+		g_s.xc[g_r.id] = floor((g_rows.xhit[g_i]) / TILESIZE) * TILESIZE + ((g_tab[0] == 1) ? TILESIZE / (-2) : (TILESIZE / 2));
+		g_s.yc[g_r.id] = floor(g_rows.yhit[g_i] / TILESIZE) * TILESIZE + TILESIZE / 2;
+		g_tab[2] = 1;
 	}
 	else
 	{
-		s.xc[r.id] = floor(rows.xhit[g_i] / TILESIZE) * TILESIZE +  TILESIZE / 2;
-		s.yc[r.id] = floor(rows.yhit[g_i] / TILESIZE) * TILESIZE + ((tab[1] == 1) ? TILESIZE / 2 : TILESIZE / (-2));
-		tab[2] = 0;
+		g_s.xc[g_r.id] = floor(g_rows.xhit[g_i] / TILESIZE) * TILESIZE +  TILESIZE / 2;
+		g_s.yc[g_r.id] = floor(g_rows.yhit[g_i] / TILESIZE) * TILESIZE + ((g_tab[1] == 1) ? TILESIZE / 2 : TILESIZE / (-2));
+		g_tab[2] = 0;
 	}
 	find_point();
 }
@@ -30,16 +25,16 @@ void	rectosprite(float spriteHeight, int i)
 	int j;
 	int y;
 
-	j = sc.h / 2 - spriteHeight / 2 + p.look;
+	j = g_sc.h / 2 - spriteHeight / 2 + g_p.look;
 	c = j;
 	if(j < 0)
 		j = 0;
-	while(j - c < spriteHeight && j < sc.h)
+	while(j - c < spriteHeight && j < g_sc.h)
 	{
 		y = (int)((j - c) * TILESIZE) / spriteHeight;
-			if(t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y] != 0x000000 && check_color(t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y]))
-				data[(int )i + (int )j * sc.w] = t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y];
-				//printf("color is%x\n", data[(int )i + (int )j * sc.w] = t.sprite[(int)s.xofset[r.id][g_i] + TILESIZE * y]);
+			if(g_t.sprite[(int)g_s.xofset[g_r.id][g_i] + TILESIZE * y] != 0x000000 && check_color(g_t.sprite[(int)g_s.xofset[g_r.id][g_i] + TILESIZE * y]))
+				data[(int )i + (int )j * g_sc.w] = g_t.sprite[(int)g_s.xofset[g_r.id][g_i] + TILESIZE * y];
+				//printf("color is%x\n", data[(int )i + (int )j * g_sc.w] = g_t.sprite[(int)g_s.xofset[g_r.id][g_i] + TILESIZE * y]);
 		j++;
 		//printf("heho\n");
 	}
@@ -51,8 +46,8 @@ void	render3dsprite(void)
 	float spriteHeight;
 	float dist;
 
-	dist = sqrtf(powf(p.x - s.xc[r.id], 2) + powf(p.y - s.yc[r.id], 2));
-	projectDistance = (sc.w / 2) / tan(fov / 2);
+	dist = sqrtf(powf(g_p.x - g_s.xc[g_r.id], 2) + powf(g_p.y - g_s.yc[g_r.id], 2));
+	projectDistance = (g_sc.w / 2) / tan(fov / 2);
 	spriteHeight = (projectDistance / dist) * TILESIZE;
-	rectosprite(spriteHeight, r.id);
+	rectosprite(spriteHeight, g_r.id);
 }

@@ -8,7 +8,7 @@ int		invalide_map_path(void)
 
 int		wrong_argument(void)
 {
-	ft_putstr("please enter 2 arguments");
+	ft_putstr("Error\nplease enter 2 arguments");
 	return(0);
 }
 
@@ -19,7 +19,7 @@ int		wrong_format(int indice)
 	else
 		ft_putstr("Error\nWrong save format");
 	if(indice == 1)
-			screenshot = 1;
+			g_screenshot = 1;
 	return(0);
 }
 

@@ -1,7 +1,5 @@
 #include "cub3d.h"
 
-text t;
-
 int		ft_xpm(unsigned int **info, char	*file)
 {
 	int		fd;
@@ -14,7 +12,7 @@ int		ft_xpm(unsigned int **info, char	*file)
 		return(0);
 	}
 	close(fd);
-	img = mlx_xpm_file_to_image(mlx_ptr, file, &tab[0], &tab[1]);
+	img = mlx_xpm_file_to_image(g_mlx_ptr, file, &tab[0], &tab[1]);
 	*info = (unsigned int *)mlx_get_data_addr(img, &tab[2], &tab[3], &tab[4]);
 	free(img);
 	return(1);
@@ -24,15 +22,15 @@ int		ft_textures(void)
 {
 	char			*file5;
 	file5 = "utils/pictures/barrel.xpm";
-	if(!ft_xpm(&t.txtr1, eapath))
+	if(!ft_xpm(&g_t.txtr1, eapath))
 		return(0);
-	if(!ft_xpm(&t.txtr2, sopath))
+	if(!ft_xpm(&g_t.txtr2, sopath))
 		return(0);
-	if(!ft_xpm(&t.txtr3, nopath))
+	if(!ft_xpm(&g_t.txtr3, nopath))
 		return(0);
-	if(!ft_xpm(&t.txtr4, wepath))
+	if(!ft_xpm(&g_t.txtr4, wepath))
 		return(0);
-	if(!ft_xpm(&t.sprite, file5))
+	if(!ft_xpm(&g_t.sprite, file5))
 		return(0);
 	return(1);
 }

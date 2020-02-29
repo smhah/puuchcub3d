@@ -11,7 +11,7 @@ void	stocknopath(char *path)
 		while(path[j])
 			nopath[i++] = path[j++];
 		nopath[i] = '\0';
-	check_all++;
+	g_check_all++;
 }
 
 void	stocksopath(char *path)
@@ -25,7 +25,7 @@ void	stocksopath(char *path)
 		while(path[j])
 			sopath[i++] = path[j++];
 		sopath[i] = '\0';
-	check_all++;
+	g_check_all++;
 }
 
 void	stockwepath(char *path)
@@ -39,7 +39,7 @@ void	stockwepath(char *path)
 	while(path[j])
 		wepath[i++] = path[j++];
 	wepath[i] = '\0';
-	check_all++;
+	g_check_all++;
 }
 
 void	stockeapath(char *path)
@@ -53,5 +53,5 @@ void	stockeapath(char *path)
 	while(path[j])
 		eapath[i++] = path[j++];
 	eapath[i] = '\0';
-	check_all++;
+	g_check_all++;
 }
