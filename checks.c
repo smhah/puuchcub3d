@@ -21,6 +21,8 @@ int			is_player(char a)
 
 int			check_intervale(char *s, int indice)
 {
+	int a;
+
 	a = ft_atoi(s);
 	if (a >= 0 && a <= 255)
 		return (1);
@@ -31,6 +33,24 @@ int			check_intervale(char *s, int indice)
 	return (0);
 }
 
+// char		*ft_first_split(char *s, int indice)
+// {
+// 	int i;
+// 	char **tab;
+// 	int a;
+// 	int b;
+
+// 	i = 0;
+// 	tab = m_malloc(3);
+// 	tab[0] = m_malloc(3);
+// 	tab[1] = m_malloc(12);
+// 	while(s[i])
+// 	{
+// 		while(s[i] && (s[i] == ' ' || s[i] == '\t'))
+// 			i++;
+		
+// 	}
+// }
 int			check_if_char(char *s, int indice)
 {
 	int i;

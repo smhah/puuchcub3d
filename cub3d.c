@@ -20,7 +20,7 @@ void		render(void)
 	g_op.max_dist = sqrtf(powf(0 - (float)g_p.map_a *
 		TILESIZE, 2) + powf(0 - (float)g_p.map_b * TILESIZE, 2));
 	g_op.max_dist *= 0.85;
-	while (g_r.id < Num_rays)
+	while (g_r.id < g_num_rays)
 	{
 		g_s.sprite = 0;
 		color = 0xfa2c34;
@@ -71,10 +71,10 @@ void		posplayer(int g_height, int g_width, char **g_lines, int indice)
 
 void		init_all(void)
 {
-	fov = 60 * (PI / 180);
-	rays_width = 1;
-	Num_rays = g_sc.w / rays_width;
-	g_r.rays = m_malloc(sizeof(float) * Num_rays);
+	g_fov = 60 * (PI / 180);
+	g_rays_width = 1;
+	g_num_rays = g_sc.w / g_rays_width;
+	g_r.rays = m_malloc(sizeof(float) * g_num_rays);
 	g_r.id = 0;
 	g_p.x = 0;
 	g_p.y = 0;
@@ -99,7 +99,7 @@ void		init_all(void)
 int			beginning(int ac, char **av, int fd)
 {
 	g_mc = 0;
-	if (ac < 2)
+	if (ac > 3 || ac < 2)
 		return (wrong_argument());
 	else if (ac > 2)
 	{
@@ -142,8 +142,8 @@ int			main(int ac, char **av)
 		g_win_ptr = mlx_new_window(g_mlx_ptr, g_sc.w, g_sc.h, "mlx 42");
 	else
 		return (screen());
-	img = mlx_new_image(g_mlx_ptr, g_sc.w, g_sc.h);
-	data = (int*)mlx_get_data_addr(img, &a, &b, &c);
+	g_img = mlx_new_image(g_mlx_ptr, g_sc.w, g_sc.h);
+	g_data = (int*)mlx_get_data_addr(g_img, &g_imga, &g_imgb, &g_imgc);
 	posplayer(g_height, g_width, g_lines, 0);
 	mlx_loop_hook(g_mlx_ptr, update, 0);
 	mlx_loop(g_mlx_ptr);

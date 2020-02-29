@@ -45,9 +45,15 @@ int		stock_celling_color(char **array, int indice)
 int		stock_colors(char **array, int indice)
 {
 	if (indice == 1)
-		stock_floor_color(array, indice);
+	{
+		if(!stock_floor_color(array, indice))
+			return(0);
+	}
 	else
-		stock_celling_color(array, indice);
+	{
+		if(!stock_celling_color(array, indice))
+			return(0);
+	}
 	return (1);
 }
 

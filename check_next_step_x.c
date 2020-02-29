@@ -21,6 +21,8 @@ int		check_player(char a)
 
 int		normx1(int i)
 {
+	int b;
+
 	if (i == 1)
 	{
 		b = (int)((g_p.x + cosf(g_p.rotation_angle) *
@@ -46,6 +48,8 @@ int		normx1(int i)
 
 int		normx2(int i)
 {
+	int b;
+
 	if (i == 2)
 	{
 		b = (int)(g_p.x + cosf(g_p.rotation_angle - PI / 2) *

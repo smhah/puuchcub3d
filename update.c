@@ -6,9 +6,9 @@ void    player_update(void)
 		g_p.rotation_angle -= g_p.rotation_speed;
 	if (g_p.cam_right == 1) //right
 		g_p.rotation_angle += g_p.rotation_speed;
-	if(g_p.walk_for == 1 || g_p.walk_back == 1)
+	if (g_p.walk_for == 1 || g_p.walk_back == 1)
 		walk_for_or_back();
-	if(g_p.walk_left == 1 || g_p.walk_right == 1)
+	if (g_p.walk_left == 1 || g_p.walk_right == 1)
 		walk_right_or_left();
 	if (g_p.look_up == 1 && g_p.look < 300)
 			g_p.look+=10;
@@ -20,15 +20,13 @@ void    cast_all_rays(void)
 {
 	int i;
 
-	columnId = 0;
 	i = 0;
-	g_rayangle = g_p.rotation_angle - (fov / 2);
-	while(i < Num_rays)
+	g_rayangle = g_p.rotation_angle - (g_fov / 2);
+	while (i < g_num_rays)
 	{
-		g_r.rays[columnId] = g_rayangle;
-		g_rayangle += fov / Num_rays;
-		i+=1;
-		columnId++;
+		g_r.rays[i] = g_rayangle;
+		g_rayangle += g_fov / g_num_rays;
+		i += 1;
 	}
 }
 
@@ -39,12 +37,12 @@ void	blackscreen(void)
 
 	x = 0;
 	y = 0;
-	while(x < g_sc.w)
+	while (x < g_sc.w)
 	{
 		y = 0;
-		while(y < g_sc.h)
+		while (y < g_sc.h)
 		{
-			data[(int )x + (int )y * g_sc.w] = 0x000000;
+			g_data[(int )x + (int )y * g_sc.w] = 0x000000;
 			y++;
 		}
 		x++;
@@ -54,7 +52,7 @@ void	blackscreen(void)
 int	keyexit(int key)
 {
 	(void)key;
-	return(exit_cub3d(0));
+	return (exit_cub3d(0));
 }
 
 int update()
@@ -69,6 +67,6 @@ int update()
 	render();
 	mlx_clear_window(g_mlx_ptr, g_win_ptr);
 	if (!i || i++ == 127)
-		mlx_put_image_to_window(g_mlx_ptr, g_win_ptr, img, 0 , 0);
+		mlx_put_image_to_window(g_mlx_ptr, g_win_ptr, g_img, 0 , 0);
 	return (0);
 }

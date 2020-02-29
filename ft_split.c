@@ -9,6 +9,7 @@
 /*   Updated: 2020/02/24 00:10:16 by smhah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "cub3d.h"
 
 static int	ft_countwords(const char *str, char c)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_sprite.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smhah <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/29 11:38:57 by smhah             #+#    #+#             */
+/*   Updated: 2020/02/29 11:38:58 by smhah            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	sprite_dist(void)
@@ -6,12 +18,13 @@ void	sprite_dist(void)
 	int e;
 
 	i = 0;
-	while(g_rows.xhit[i] < MAXINT - 100)
+	while (g_rows.xhit[i] < MAXINT - 100)
 	{
 		e = g_rows.xhit[i];
-		if( e < 0)
+		if (e < 0)
 			e = e * (-1);
-		g_rows.dist[i] = sqrtf(powf(g_p.x - e, 2) + powf(g_p.y - g_rows.yhit[i], 2));
+		g_rows.dist[i] = sqrtf(powf(g_p.x - e, 2)
+			+ powf(g_p.y - g_rows.yhit[i], 2));
 		i++;
 	}
 	g_rows.dist[i] = MAXINT;
@@ -40,12 +53,12 @@ void	sort(void)
 	j = 1;
 	sprite_dist();
 	i = 0;
-	while(g_rows.dist[i] < MAXINT - 100)
+	while (g_rows.dist[i] < MAXINT - 100)
 	{
 		j = i + 1;
-		while(g_rows.dist[j] < MAXINT - 100)
+		while (g_rows.dist[j] < MAXINT - 100)
 		{
-			if(g_rows.dist[i] > g_rows.dist[j])
+			if (g_rows.dist[i] > g_rows.dist[j])
 				switchs(i, j);
 			j++;
 		}

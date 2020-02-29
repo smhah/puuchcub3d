@@ -124,7 +124,7 @@ typedef struct			s_image
 	int					bpp;
 	int					endian;
 	void				*img_ptr;
-	char				*data;
+	char				*g_data;
 }						t_image;
 
 typedef struct			s_keybuffer

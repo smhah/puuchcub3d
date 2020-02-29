@@ -10,20 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	condition(long resultat, int signe)
-{
-	if (resultat > 2147483648 && signe == -1)
-		return (0);
-	if (resultat > 2147483647 && signe == 1)
-		return (-1);
-	return (0);
-}
+// static int	condition(long resultat, int signe)
+// {
+// 	if (resultat > 2147483648 && signe == -1)
+// 		return (0);
+// 	if (resultat > 2147483647 && signe == 1)
+// 		return (-1);
+// 	return (0);
+// }
 
-int			ft_atoi(const char *str)
+long long			ft_atoi(const char *str)
 {
 	int		signe;
 	int		i;
-	long	resultat;
+	long long	resultat;
+	//long long r;
 
 	resultat = 0;
 	i = 0;
@@ -41,9 +42,9 @@ int			ft_atoi(const char *str)
 	{
 		resultat = resultat * 10 + str[i] - '0';
 		i++;
-		if ((resultat > 2147483647 && signe == 1)
-				|| (resultat > 2147483648 && signe == -1))
-			return (condition(resultat, signe));
+		// if ((resultat > 2147483647 && signe == 1)
+		// 		|| (resultat > 2147483648 && signe == -1))
+		// 	return (condition(resultat, signe));
 	}
 	return (resultat * signe);
 }
